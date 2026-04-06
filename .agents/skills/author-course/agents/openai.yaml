@@ -1,0 +1,7 @@
+interface:
+  display_name: "Course Authoring"
+  short_description: "Author Instruqt tracks and labs"
+  default_prompt: "Use $author-course to author or update an Instruqt track, then validate and test it before publishing."
+
+policy:
+  allow_implicit_invocation: true
