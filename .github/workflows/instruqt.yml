@@ -1,0 +1,95 @@
+name: Instruqt Track CI
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'courses/**'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'courses/**'
+
+jobs:
+  detect-changes:
+    name: Detect modified tracks
+    runs-on: ubuntu-latest
+    outputs:
+      tracks: ${{ steps.find-tracks.outputs.tracks }}
+      has_tracks: ${{ steps.find-tracks.outputs.has_tracks }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Get changed files (push)
+        if: github.event_name == 'push'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh api repos/${{ github.repository }}/compare/${{ github.event.before }}...${{ github.event.after }} \
+            --jq '.files[].filename' > /tmp/changed-files.txt
+
+      - name: Get changed files (pull_request)
+        if: github.event_name == 'pull_request'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh api repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/files \
+            --paginate --jq '.[].filename' > /tmp/changed-files.txt
+
+      - name: Find modified tracks
+        id: find-tracks
+        run: |
+          TRACKS=$(cat /tmp/changed-files.txt \
+            | grep '^courses/' \
+            | cut -d'/' -f1-2 \
+            | sort -u \
+            | while read dir; do
+                [ -f "$dir/track.yml" ] && echo "$dir"
+              done)
+          
+          if [ -z "$TRACKS" ]; then
+            echo "No tracks with track.yml found in diff."
+            echo "has_tracks=false" >> "$GITHUB_OUTPUT"
+            echo 'tracks=[]' >> "$GITHUB_OUTPUT"
+          else
+            JSON=$(echo "$TRACKS" | jq -R -s -c 'split("\n") | map(select(. != ""))')
+            echo "Detected tracks: $JSON"
+            echo "has_tracks=true" >> "$GITHUB_OUTPUT"
+            echo "tracks=$JSON" >> "$GITHUB_OUTPUT"
+          fi
+  
+  ci:
+    name: "${{ github.event_name == 'push' && 'Push' || 'Validate' }} ${{ matrix.track }}"
+    needs: detect-changes
+    if: needs.detect-changes.outputs.has_tracks == 'true'
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        track: ${{ fromJson(needs.detect-changes.outputs.tracks) }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Validate track
+        if: github.event_name == 'pull_request'
+        uses: instruqt/cli/validate@v1
+        with:
+          path: ${{ matrix.track }}
+
+      - name: Set up Instruqt CLI
+        if: github.event_name == 'push'
+        uses: instruqt/cli/setup@v1
+
+      - name: Push track
+        if: github.event_name == 'push'
+        env:
+          INSTRUQT_TOKEN: ${{ secrets.INSTRUQT_TOKEN }}
+        run: |
+          echo "📤 Pushing ${{ matrix.track }}"
+          cd "${{ matrix.track }}"
+          instruqt track push
+          echo "✅ Successfully pushed ${{ matrix.track }}"
