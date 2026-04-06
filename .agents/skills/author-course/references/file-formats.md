@@ -327,6 +327,8 @@ notes:
   url: ../assets/overview.mp4
 ```
 
+You should assume the user might gloss over this content, or not read all the slides if there are multiple. Use it for context, but also ensure you add the essential context to the main Markdown body that the learner sees when the challenge starts.
+
 ### Quiz challenges
 
 For quiz/multiple-choice challenges, use `type: quiz` and add `answers`:
