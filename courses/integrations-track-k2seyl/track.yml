@@ -1,0 +1,29 @@
+slug: integrations-track-k2seyl
+id: myrzl8hcuvps
+title: Prefect Integrations
+teaser: Connect Prefect to your data stack. Learn to orchestrate dbt, cloud services,
+  and the tools your pipelines depend on.
+description: Prefect works best when it's connected to everything else. This track
+  teaches you how to integrate Prefect with popular tools in the modern data stack.
+  Start with dbt for transformation orchestration, then expand  to cloud platforms
+  and data services. Each module shows you real patterns for building workflows that
+  span your entire infrastructure.
+icon: ./assets/logo-mark.svg
+tags:
+- prefect
+- intermediate
+owner: prefect
+developers:
+- wayne@prefect.io
+show_timer: true
+idle_timeout: 300
+timelimit: 1800
+lab_config:
+  sidebar_enabled: true
+  feedback_recap_enabled: true
+  feedback_tab_enabled: false
+  loadingMessages: true
+  override_challenge_layout: false
+  hideStopButton: false
+checksum: "10754112187277851673"
+enhanced_loading: false

@@ -1,0 +1,34 @@
+slug: prefect-foundations
+id: ae4byskycwxd
+title: Prefect Foundations
+teaser: Build your first Prefect workflows. Learn flows, tasks, deployments, and the
+  core patterns that power production pipelines.
+description: Everything you need to start orchestrating with Prefect. This track takes
+  you from zero to deploying your first workflows - covering flows and tasks, error
+  handling, observability, caching, and connecting to  Prefect Cloud. By the end,
+  you'll have the foundation to build reliable data pipelines that you can actually
+  trust in production.
+icon: ./assets/logo-mark.svg
+tags:
+- beginner
+- prefect
+owner: prefect
+developers:
+- wayne@prefect.io
+- brendan.dalpe@prefect.io
+show_timer: true
+skipping_enabled: true
+idle_timeout: 1200
+timelimit: 2700
+lab_config:
+  extend_ttl: 1200
+  sidebar_enabled: true
+  feedback_recap_enabled: true
+  feedback_tab_enabled: false
+  loadingMessages: true
+  override_challenge_layout: false
+  hideStopButton: false
+  default_layout: AssignmentRight
+  default_layout_sidebar_size: 33
+checksum: "97815701253779914"
+enhanced_loading: false

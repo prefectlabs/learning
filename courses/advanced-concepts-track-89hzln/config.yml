@@ -1,0 +1,9 @@
+version: "3"
+virtualbrowsers:
+- name: prefect-cloud
+  url: https://app.prefect.cloud
+virtualmachines:
+- name: prefect-sandbox
+  image: ubuntu-os-cloud/ubuntu-2404-noble-amd64-v20241004
+  memory: 4096
+  cpus: 1

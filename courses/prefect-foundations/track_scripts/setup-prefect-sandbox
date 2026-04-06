@@ -1,0 +1,13 @@
+#!/bin/bash
+set -euxo pipefail
+
+apt update
+apt install curl -y
+
+cat <<'EOF' > hello_world.py
+def hello(name: str = "Marvin"):
+    print(f"Hello, {name}!")
+
+if __name__ == "__main__":
+    hello()
+EOF
