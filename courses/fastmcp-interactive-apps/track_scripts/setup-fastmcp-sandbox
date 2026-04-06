@@ -1,0 +1,16 @@
+#!/bin/bash
+set -euxo pipefail
+
+until [ -f /opt/instruqt/bootstrap/host-bootstrap-completed ]; do
+  sleep 1
+done
+
+apt-get update
+apt-get install -y curl git jq python3-pip python3-venv
+
+TRACK_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+source "${TRACK_ROOT}/assets/project-dashboard/helpers.sh"
+
+sync_stage "01-start"
+ensure_environment
+stop_preview

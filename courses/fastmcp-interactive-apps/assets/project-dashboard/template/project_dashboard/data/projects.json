@@ -1,0 +1,32 @@
+[
+  {
+    "id": "proj-api",
+    "name": "API Revamp",
+    "owner": "Jordan",
+    "status": "on-track",
+    "sprint": "Sprint 12",
+    "completion": 72,
+    "open_bugs": 3,
+    "focus": "Release the new auth flow."
+  },
+  {
+    "id": "proj-mobile",
+    "name": "Mobile Beta",
+    "owner": "Avery",
+    "status": "at-risk",
+    "sprint": "Sprint 12",
+    "completion": 58,
+    "open_bugs": 7,
+    "focus": "Stabilize offline sync before beta signups."
+  },
+  {
+    "id": "proj-data",
+    "name": "Analytics Hub",
+    "owner": "Kai",
+    "status": "blocked",
+    "sprint": "Sprint 11",
+    "completion": 41,
+    "open_bugs": 5,
+    "focus": "Rotate warehouse credentials and restore ingestion."
+  }
+]

@@ -1,0 +1,46 @@
+{
+  "summary": {
+    "velocity": 31,
+    "reliability": 97,
+    "open_incidents": 2
+  },
+  "delivery_trend": [
+    {
+      "week": "W1",
+      "planned": 20,
+      "completed": 18
+    },
+    {
+      "week": "W2",
+      "planned": 24,
+      "completed": 21
+    },
+    {
+      "week": "W3",
+      "planned": 26,
+      "completed": 22
+    },
+    {
+      "week": "W4",
+      "planned": 28,
+      "completed": 26
+    }
+  ],
+  "project_health": [
+    {
+      "project": "API Revamp",
+      "throughput": 12,
+      "bugs": 3
+    },
+    {
+      "project": "Mobile Beta",
+      "throughput": 9,
+      "bugs": 7
+    },
+    {
+      "project": "Analytics Hub",
+      "throughput": 6,
+      "bugs": 5
+    }
+  ]
+}

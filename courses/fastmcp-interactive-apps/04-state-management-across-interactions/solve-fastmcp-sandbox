@@ -1,0 +1,9 @@
+#!/bin/bash
+set -euxo pipefail
+
+TRACK_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+source "${TRACK_ROOT}/assets/project-dashboard/helpers.sh"
+
+stop_preview
+sync_stage "04-solution"
+ensure_environment
