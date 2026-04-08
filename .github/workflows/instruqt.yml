@@ -79,9 +79,11 @@ jobs:
 
       - name: Validate track
         if: github.event_name == 'pull_request'
-        uses: instruqt/cli/validate@v1
-        with:
-          path: ${{ matrix.track }}
+        run: |
+          echo "🔍 Validating ${{ matrix.track }}"
+          cd "${{ matrix.track }}"
+          instruqt track validate
+          echo "✅ Successfully validated ${{ matrix.track }}"
 
       - name: Push track
         if: github.event_name == 'push'
