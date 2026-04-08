@@ -1,0 +1,17 @@
+#!/bin/bash
+set -euxo pipefail
+
+export PATH="$HOME/.local/bin:$PATH"
+export PREFECT_API_URL="http://127.0.0.1:8006/api"
+
+cd /root/pal
+source .venv/bin/activate
+
+if ! prefect work-pool inspect pal-process-pool >/dev/null 2>&1; then
+  prefect work-pool create pal-process-pool --type process
+fi
+
+if ! pgrep -f "prefect worker start --pool pal-process-pool --type process" >/dev/null 2>&1; then
+  nohup prefect worker start --pool pal-process-pool --type process \
+    >/root/pal/prefect-worker.log 2>&1 &
+fi

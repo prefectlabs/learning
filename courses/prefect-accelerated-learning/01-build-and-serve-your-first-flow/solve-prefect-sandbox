@@ -1,0 +1,28 @@
+#!/bin/bash
+set -euxo pipefail
+
+cd /root/pal
+
+cat <<'EOF' > weather_service.py
+import httpx
+from prefect import flow
+
+
+@flow(log_prints=True)
+def fetch_weather(lat: float = 38.9, lon: float = -77.0):
+    base_url = "https://api.open-meteo.com/v1/forecast/"
+    response = httpx.get(
+        base_url,
+        params={"latitude": lat, "longitude": lon, "hourly": "temperature_2m"},
+    )
+    forecasted_temp = float(response.json()["hourly"]["temperature_2m"][0])
+    print(f"Forecasted temp C: {forecasted_temp}")
+    return forecasted_temp
+
+
+if __name__ == "__main__":
+    fetch_weather.serve(
+        name="pal-weather-service",
+        cron="*/5 * * * *",
+    )
+EOF

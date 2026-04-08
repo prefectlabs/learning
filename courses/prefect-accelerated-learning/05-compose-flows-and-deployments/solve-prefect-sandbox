@@ -1,0 +1,51 @@
+#!/bin/bash
+set -euxo pipefail
+
+cd /root/pal
+
+cat <<'EOF' > animal_facts.py
+import httpx
+from prefect import flow
+
+
+@flow
+def fetch_cat_fact():
+    return httpx.get("https://catfact.ninja/fact?max_length=140").json()["fact"]
+
+
+@flow
+def fetch_dog_fact():
+    return httpx.get(
+        "https://dogapi.dog/api/v2/facts",
+        headers={"accept": "application/json"},
+    ).json()["data"][0]["attributes"]["body"]
+
+
+@flow(log_prints=True)
+def animal_facts():
+    cat_fact = fetch_cat_fact()
+    dog_fact = fetch_dog_fact()
+    print(f"CAT: {cat_fact}")
+    print(f"DOG: {dog_fact}")
+
+
+if __name__ == "__main__":
+    animal_facts()
+EOF
+
+cat <<'EOF' > run_local_deployment.py
+from prefect import flow
+from prefect.deployments import run_deployment
+
+
+@flow
+def run_local_deployment():
+    run_deployment(
+        name="greet-flow/pal-local-greeting",
+        parameters={"name": "Prefect"},
+    )
+
+
+if __name__ == "__main__":
+    run_local_deployment()
+EOF

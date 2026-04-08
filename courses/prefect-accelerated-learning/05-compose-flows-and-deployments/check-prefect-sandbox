@@ -1,0 +1,11 @@
+#!/bin/bash
+set -euxo pipefail
+
+cd /root/pal
+
+test -f animal_facts.py
+test -f run_local_deployment.py
+test "$(grep -c "@flow" animal_facts.py)" -ge 3
+grep -q "run_deployment" run_local_deployment.py
+grep -q "pal-local-greeting" run_local_deployment.py
+grep -q "httpx.get" animal_facts.py

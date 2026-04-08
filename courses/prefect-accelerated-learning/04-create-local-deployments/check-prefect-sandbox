@@ -1,0 +1,19 @@
+#!/bin/bash
+set -euxo pipefail
+
+export PATH="$HOME/.local/bin:$PATH"
+export PREFECT_API_URL="http://127.0.0.1:8006/api"
+
+cd /root/pal
+source .venv/bin/activate
+
+test -f local_deploy.py
+test -f deploy_local.py
+grep -q "@flow(log_prints=True)" local_deploy.py
+grep -q "greet_flow" local_deploy.py
+grep -q "\.from_source(" deploy_local.py
+grep -q "\.deploy(" deploy_local.py
+grep -q 'work_pool_name="pal-process-pool"' deploy_local.py
+
+uv run deploy_local.py
+prefect deployment ls | grep -q "pal-local-greeting"

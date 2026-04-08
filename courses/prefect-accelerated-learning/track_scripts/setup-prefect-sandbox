@@ -1,0 +1,58 @@
+#!/bin/bash
+set -euxo pipefail
+
+until [ -f /opt/instruqt/bootstrap/host-bootstrap-completed ]; do
+  sleep 1
+done
+
+export DEBIAN_FRONTEND=noninteractive
+apt-get update
+apt-get install -y curl git python3 python3-venv python3-pip build-essential
+
+curl -LsSf https://astral.sh/uv/install.sh | sh
+export PATH="$HOME/.local/bin:$PATH"
+
+mkdir -p /root/pal
+cd /root/pal
+
+if [ ! -d .venv ]; then
+  uv venv
+fi
+
+source .venv/bin/activate
+uv pip install -U prefect httpx pandas requests pydantic
+
+touch /root/pal/.course_initialized
+
+if ! grep -q "cd /root/pal" /root/.bashrc; then
+  cat <<'EOF' >> /root/.bashrc
+export PATH="$HOME/.local/bin:$PATH"
+export PREFECT_API_URL="http://127.0.0.1:8006/api"
+cd /root/pal
+if [ -f /root/pal/.venv/bin/activate ]; then
+  source /root/pal/.venv/bin/activate
+fi
+EOF
+fi
+
+if ! pgrep -f "prefect server start.*8006" >/dev/null 2>&1; then
+  nohup /root/pal/.venv/bin/prefect server start --host 0.0.0.0 --port 8006 \
+    >/root/pal/prefect-server.log 2>&1 &
+fi
+
+for _ in $(seq 1 60); do
+  if curl -sf http://127.0.0.1:8006/api/health >/dev/null 2>&1; then
+    break
+  fi
+  sleep 2
+done
+
+cat <<'EOF' > /root/pal/README.md
+# Prefect Accelerated Learning Workspace
+
+This workspace is used across all PAL labs.
+
+- Your Python virtualenv lives in `/root/pal/.venv`
+- The local Prefect UI is available at `http://127.0.0.1:8006`
+- The local API URL is exported as `PREFECT_API_URL`
+EOF

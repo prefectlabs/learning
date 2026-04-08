@@ -1,0 +1,43 @@
+#!/bin/bash
+set -euxo pipefail
+
+cd /root/pal
+
+cat <<'EOF' > weather_tasks.py
+import httpx
+from prefect import flow, runtime, task
+
+
+@task
+def fetch_weather(lat: float, lon: float):
+    base_url = "https://api.open-meteo.com/v1/forecast/"
+    response = httpx.get(
+        base_url,
+        params={"latitude": lat, "longitude": lon, "hourly": "temperature_2m"},
+    )
+    forecasted_temp = float(response.json()["hourly"]["temperature_2m"][0])
+    print(f"Forecasted temp C: {forecasted_temp}")
+    return forecasted_temp
+
+
+@task
+def save_weather(temp: float):
+    with open("weather.csv", "w", encoding="utf-8") as weather_file:
+        weather_file.write(str(temp))
+    return "Successfully wrote temp"
+
+
+@flow(retries=3, log_prints=True)
+def pipeline(lat: float = 38.9, lon: float = -77.0):
+    print(f"Flow run name: {runtime.flow_run.name}")
+    temp = fetch_weather(lat, lon)
+    result = save_weather(temp)
+    print(result)
+    return result
+
+
+if __name__ == "__main__":
+    pipeline()
+EOF
+
+printf "72.0" > weather.csv

@@ -1,0 +1,12 @@
+#!/bin/bash
+set -euxo pipefail
+
+cd /root/pal
+
+test -f interactive_and_concurrent.py
+grep -q "pause_flow_run" interactive_and_concurrent.py
+grep -q "ThreadPoolTaskRunner" interactive_and_concurrent.py
+grep -q "\.submit(" interactive_and_concurrent.py
+grep -q "wait(" interactive_and_concurrent.py
+
+uv run interactive_and_concurrent.py
