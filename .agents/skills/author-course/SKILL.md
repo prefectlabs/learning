@@ -63,7 +63,7 @@ When the user asks you to create or edit Instruqt content, read the appropriate 
 2. **Clarify only what is missing** - Ask follow-up questions only for product intent or decisions that are not discoverable from the local track.
 3. **Authenticate if needed** - If an Instruqt CLI command fails with an auth or token-refresh error, run `instruqt auth login` and retry.
 4. **Read references** - Before generating or editing files, read `references/file-formats.md` and `references/content-design.md`.
-5. **Generate or update the track** - Create or edit files under `courses/<track-slug>/`. Start with `track.yml` and `config.yml`, then update each challenge directory with its `assignment.md` and lifecycle scripts.
+5. **Generate or update the track** - Create or edit files under `courses/<track-slug>/`. Start with `track.yml` and `config.yml`, then update each challenge directory with its `assignment.md` and lifecycle scripts. For brand-new tracks, set `maintenance: true` in `track.yml` unless the user explicitly asks for a live/published-ready track.
 6. **Write assignment content** - Each `assignment.md` has YAML frontmatter (separated by `---`) followed by Markdown. Apply the Tell/Show/Do method: explain concepts first, then give the learner hands-on tasks.
 7. **Write lifecycle scripts** - Every script in this repo should start with `#!/bin/bash` and `set -euxo pipefail`. Track setup scripts should wait for bootstrap. Check scripts should validate the learner's work and exit non-zero on failure. Solve scripts should automate the correct solution.
 8. **Validate and test** - Run `instruqt track validate` and `instruqt track test` before publishing.
@@ -81,4 +81,5 @@ When the user asks you to create or edit Instruqt content, read the appropriate 
 - YAML indentation uses spaces only, never tabs.
 - The `owner` field in `track.yml` must match the user's Instruqt team/org slug.
 - Leave `id` fields empty or omit them for new content; preserve IDs that already exist on pulled tracks.
+- New tracks should default to `maintenance: true`; preserve the existing `maintenance` value on pulled tracks unless the user asks to change it.
 - When editing pulled tracks, preserve existing metadata fields and tab IDs unless you are intentionally changing them.

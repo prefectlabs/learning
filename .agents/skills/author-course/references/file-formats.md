@@ -29,7 +29,7 @@
 
 Defines the track's metadata, ownership, and lab settings.
 
-Use this as a repo-shaped baseline, not an exhaustive schema. When editing a pulled track, preserve existing fields that are already present even if they are not needed in a brand-new scaffold.
+Use this as a repo-shaped baseline, not an exhaustive schema. When editing a pulled track, preserve existing fields that are already present even if they are not needed in a brand-new scaffold. New tracks in this repo should default to maintenance mode until they are ready to go live.
 
 ```yaml
 slug: my-track-slug
@@ -46,7 +46,7 @@ tags:
 owner: your-org-slug
 developers:
 - developer@example.com
-maintenance: false
+maintenance: true
 show_timer: true
 skipping_enabled: false
 idle_timeout: 300          # seconds of inactivity before warning
@@ -82,7 +82,7 @@ enhanced_loading: false
 | `timelimit` | No | Total track time limit (seconds) |
 | `idle_timeout` | No | Inactivity timeout (seconds) |
 | `skipping_enabled` | No | Allow learners to skip challenges |
-| `maintenance` | No | If true, track is in maintenance mode |
+| `maintenance` | No | If true, track is in maintenance mode; default new tracks to `true` and preserve the existing value on pulled tracks unless intentionally changing it |
 | `checksum` | No | Usually present on pulled tracks; preserve unless you know why it should change |
 | `enhanced_loading` | No | Preserve the existing value used by the track |
 
