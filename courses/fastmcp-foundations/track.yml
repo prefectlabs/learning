@@ -13,6 +13,7 @@ tags:
 owner: prefect
 developers:
 - wayne@prefect.io
+- brendan.dalpe@prefect.io
 idle_timeout: 300
 timelimit: 1200
 lab_config:
@@ -24,5 +25,5 @@ lab_config:
     name: modern-dark
   override_challenge_layout: false
   hideStopButton: false
-checksum: "4599202114376921092"
+checksum: "1649479540726983628"
 enhanced_loading: false

@@ -115,11 +115,13 @@ These tools let LLMs answer questions like:
 
 **Get the starter code:**
 
+<!--
+Hack to upload the asset via the CLI -- ![](../assets/mcp-demo.tar.gz)
+-->
+
 ```run
-git clone -b dev https://github.com/PrefectHQ/prefect-accelerated-learning.git temp-repo
-mkdir mcp-demo
-cp -r temp-repo/instruqt-courses/fastmcp/1-introducing-fastmcp/starter-code/* mcp-demo/
-rm -rf temp-repo
+curl -LO https://play.instruqt.com/assets/tracks/4lktcd6ljjr5/792fb150f36f6c2f6ad63ca58d9a4e23/assets/mcp-demo.tar.gz
+tar -xzvf mcp-demo.tar.gz
 cd mcp-demo
 ls -la
 ```
