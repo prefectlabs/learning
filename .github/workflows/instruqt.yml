@@ -73,16 +73,15 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        
+      - name: Set up Instruqt CLI
+        uses: instruqt/cli/setup@v1
 
       - name: Validate track
         if: github.event_name == 'pull_request'
         uses: instruqt/cli/validate@v1
         with:
           path: ${{ matrix.track }}
-
-      - name: Set up Instruqt CLI
-        if: github.event_name == 'push'
-        uses: instruqt/cli/setup@v1
 
       - name: Push track
         if: github.event_name == 'push'
