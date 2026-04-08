@@ -54,6 +54,7 @@ CLI cheat-sheet:
 
 When the user asks you to create or edit Instruqt content, read the appropriate reference files in this skill's `references/` directory before writing any files:
 
+- `references/course-writing.md` - Writing philosophy, voice, craft, and course-specific directives for learner-facing prose.
 - `references/file-formats.md` - Exact YAML schemas for `track.yml`, `config.yml`, and `assignment.md` frontmatter, plus tab type syntax.
 - `references/content-design.md` - Pedagogy guidelines (Tell/Show/Do), challenge writing tips, and lifecycle script patterns.
 
@@ -62,7 +63,7 @@ When the user asks you to create or edit Instruqt content, read the appropriate 
 1. **Explore first** - If the request is about an existing track, inspect `track.yml`, `config.yml`, challenge frontmatter, and script filenames before asking questions. Infer hostnames, audience, challenge count, and existing conventions from local files whenever possible.
 2. **Clarify only what is missing** - Ask follow-up questions only for product intent or decisions that are not discoverable from the local track.
 3. **Authenticate if needed** - If an Instruqt CLI command fails with an auth or token-refresh error, run `instruqt auth login` and retry.
-4. **Read references** - Before generating or editing files, read `references/file-formats.md` and `references/content-design.md`.
+4. **Read references** - Before generating or editing files, read `references/course-writing.md`, `references/file-formats.md`, and `references/content-design.md`.
 5. **Generate or update the track** - Create or edit files under `courses/<track-slug>/`. Start with `track.yml` and `config.yml`, then update each challenge directory with its `assignment.md` and lifecycle scripts. For brand-new tracks, set `maintenance: true` in `track.yml` unless the user explicitly asks for a live/published-ready track, and include `draft` in `tags:` by default until the course is intentionally retagged for publication.
 6. **Write assignment content** - Each `assignment.md` has YAML frontmatter (separated by `---`) followed by Markdown. Apply the Tell/Show/Do method: explain concepts first, then give the learner hands-on tasks.
 7. **Write lifecycle scripts** - Every script in this repo should start with `#!/bin/bash` and `set -euxo pipefail`. Track setup scripts should wait for bootstrap. Check scripts should validate the learner's work and exit non-zero on failure. Solve scripts should automate the correct solution.
