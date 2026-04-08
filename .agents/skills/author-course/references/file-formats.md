@@ -41,6 +41,7 @@ description: |-
   Supports Markdown. Shown on the track landing page.
 icon: https://cdn.instruqt.com/assets/templates/ubuntu.png
 tags:
+- draft
 - kubernetes
 - beginner
 owner: your-org-slug
@@ -78,7 +79,7 @@ enhanced_loading: false
 | `description` | Yes | Long Markdown description |
 | `owner` | Yes | Instruqt org/team slug |
 | `developers` | No | Email list of track developers |
-| `tags` | No | Searchable tags |
+| `tags` | No | Searchable tags. New tracks in this repo should include `draft` by default until they are intentionally retagged for publication. |
 | `timelimit` | No | Total track time limit (seconds) |
 | `idle_timeout` | No | Inactivity timeout (seconds) |
 | `skipping_enabled` | No | Allow learners to skip challenges |
