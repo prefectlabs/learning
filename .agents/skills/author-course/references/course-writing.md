@@ -6,9 +6,10 @@ Use this reference for learner-facing copy in `assignment.md`, notes, hints, qui
 
 - **Shift understanding**; explain the work in a way that changes how the learner thinks about it.
 - **Start with the mess they know**; describe the friction first, then introduce the fix.
-- **Work at the system level**; show how commands, settings, and scripts behave together.
-- **Go deep, not wide**; one idea explained well is better than several mentioned briefly.
+- **Work at the smallest useful system level**; show how commands, settings, and scripts behave together without extra moving parts.
+- **Keep code examples tiny**; choose the smallest code block that still proves the point. This does not apply to prose — trim the code, not the explanation around it.
 - **Stay concrete**; real paths, commands, outputs, and examples build credibility.
+- **Explain before the code fence**; every step needs 1-3 sentences that say what the command does, why the learner is running it, and what to expect. The prose is the teaching; the code block is the practice.
 - **Be hopeful without glossing over reality**; encourage progress while still naming trade-offs and failure points.
 - **Teach, don’t pitch**; the guide should still be useful even if the reader only cares about the skill itself.
 - **Let ideas connect**; each paragraph should flow into the next, and examples should demonstrate a repeatable pattern rather than act as decoration.
@@ -16,6 +17,7 @@ Use this reference for learner-facing copy in `assignment.md`, notes, hints, qui
 ## Voice and flow
 
 - **Anchor in the learner’s reality**; open from a situation they recognize instead of abstract motivation.
+- **Write a fuller opening**; give the learner a short orientation paragraph or two before the first step so they know what is happening and why it matters.
 - **Sound sure, not inflated**; make clear claims and back them with something observable.
 - **Use current terms plainly**; stay accurate without hiding behind jargon.
 - **Link each task to the workflow**; explain why the step matters in the wider system.
@@ -29,10 +31,12 @@ Use this reference for learner-facing copy in `assignment.md`, notes, hints, qui
 - **Keep feedback usable**; if the learner can stumble, tell them what to inspect and how to recover.
 - **Leave space for judgment**; do not script every choice when the exercise should teach decision-making.
 - **Match the tone to the piece**; tutorials should stay practical, while broader pieces can reach higher without losing precision.
+- **Trim the code first**; if the same point can be shown with less code or fewer steps, choose the smaller code version. But keep the explanation around it — a smaller example often needs the same amount of prose to land.
 
 ## Course rules
 
 - **Know the audience**; tune the pace and depth for beginner, intermediate, or advanced learners.
+- **Use beginner-sized code examples by default**; only scale up the code complexity when the learner needs it. Beginner-sized does not mean less explanation — it often means more, because the learner has less context to fill in gaps.
 - **Reveal the lesson gradually**; give more support early and less as context builds.
 - **Verify fast-moving details**; check current terminology, APIs, and workflows against primary sources.
 - **Retire stale language**; avoid deprecated terms and refresh examples when the ecosystem changes.
@@ -42,7 +46,7 @@ Use this reference for learner-facing copy in `assignment.md`, notes, hints, qui
 - **Show the finish line**; make the successful state visible before the learner clicks Check.
 - **Keep solve scripts aligned**; the automated path should reach the same end state the text promises.
 - **Teach one outcome at a time**; keep each challenge focused and split work that tries to do too much.
-- **Use notes for context and the body for action**; put conceptual framing in notes and let the assignment text drive the work.
+- **Use notes for background and the body for guided action**; put conceptual framing in notes and let the assignment text drive the work. But the body still needs its own opening paragraph and per-step explanations — "action-oriented" does not mean "unexplained." Notes should read like a short orientation: say what is changing, why it matters, and what the learner should notice.
 - **Use hints and examples with intent**; hints should unblock, and examples should feel believable in the environment.
 - **Validate results, not procedure**; check scripts should confirm the end state, not the exact commands used.
 
@@ -55,4 +59,6 @@ Use this reference for learner-facing copy in `assignment.md`, notes, hints, qui
 - **Does it reveal something real about the workflow?**; the lesson should leave the reader with a non-obvious takeaway.
 - **Could a thoughtful reader disagree?**; the idea should be specific enough to defend or challenge honestly.
 - **Watch for familiar failures**; generic prose, vague claims, hidden setup, mismatched instructions and checks, invented anecdotes, overselling, or cramming too much into one challenge.
+- **Could the code example be simpler?**; use the smallest code block that still teaches the pattern. But do not trim the prose that explains it — if a step has no explanation before its code fence, add one.
+- **Would the task scope feel oversized to the learner?**; trim extra services, infrastructure, and syntax from the code example. But a step that explains what is happening in 2-3 sentences is not oversized — that is normal teaching.
 - **Keep the takeaway simple**; clear, specific writing helps the learner finish the task and carry the idea into real work.

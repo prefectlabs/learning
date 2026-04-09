@@ -23,7 +23,12 @@ Each course lives in `courses/<course-slug>/` and usually includes:
 
 - `track.yml` for metadata and course configuration
 - One or more challenge directories with `assignment.md` instructions
-- Supporting assets such as images, logos, and diagrams
+- `asset-sources/` for editable source files that generate published assets
+- `assets/` for committed images, logos, diagrams, and bootstrap bundles
+
+Some courses also include a course-local `build-assets` script. When present, it turns files from `asset-sources/` into tracked files in `assets/`, and the repository's CI and pre-commit hook rebuild them automatically before validation or push.
+
+If you use the local hook, install it once with `pre-commit install`.
 
 ## Who This Is For
 

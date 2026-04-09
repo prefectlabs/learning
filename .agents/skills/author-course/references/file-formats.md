@@ -6,7 +6,8 @@
 <track-slug>/
 ├── track.yml                  # Track metadata and settings
 ├── config.yml                 # Sandbox host definitions
-├── assets/                    # Images and videos (optional)
+├── asset-sources/             # Optional editable sources for generated assets
+├── assets/                    # Images, videos, and bootstrap bundles (optional)
 │   ├── diagram.png
 │   └── intro.mp4
 ├── track_scripts/             # Track-level lifecycle scripts
@@ -167,6 +168,8 @@ notes:
   contents: |-
     # Welcome!
     In this challenge you'll create your first Kubernetes Deployment.
+    That will show you how one manifest turns into a running set of pods, and why Kubernetes keeps the desired state in place for you.
+    Watch the terminal and dashboard so you can see the cluster settle before you click Check.
 - type: image
   url: ../assets/k8s-architecture.png
 - type: video
@@ -199,6 +202,8 @@ enhanced_loading: null
 # Create a Kubernetes Deployment
 
 In this challenge, you'll create a Deployment that runs an nginx web server.
+You'll see how Kubernetes turns a small manifest into multiple running pods and keeps them healthy for you.
+By the end, you'll know what desired state looks like and how to confirm the cluster reached it.
 
 ## Step 1: Write the manifest
 
@@ -314,7 +319,7 @@ Tab definitions on pulled tracks may also carry an `id`; preserve it when presen
 
 ### Notes (intro slides)
 
-Notes appear before a challenge starts. Types:
+Notes appear before a challenge starts. They should give the learner a little more orientation than the body: explain what is happening, why it matters, and what to notice before the steps begin. Types:
 
 ```yaml
 notes:
@@ -364,5 +369,15 @@ Place image and video files in the `assets/` directory at the track root. Refere
 ```markdown
 ![Architecture](../assets/architecture.png)
 ```
+
+If you need generated assets, keep the editable inputs in `asset-sources/` and add a course-local `build-assets` script that writes the published output into `assets/` before you push or validate the course.
+
+If a file is only used by a bootstrap script, include a hidden Markdown reference somewhere in the course content so Instruqt uploads it without showing it to learners:
+
+```markdown
+<!-- ![](../assets/project-dashboard-bootstrap.tar.gz) -->
+```
+
+You can also store bootstrap content in `assets/`, but the sandbox does not mount those files automatically. Fetch them in your setup script using the Instruqt asset URL and then unpack or copy them into place.
 
 Supported formats: PNG, JPG, GIF, SVG, MP4.

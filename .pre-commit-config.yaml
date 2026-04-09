@@ -1,0 +1,8 @@
+repos:
+  - repo: local
+    hooks:
+      - id: build-course-assets
+        name: Build course assets
+        entry: bash scripts/build-course-assets.sh --apply
+        language: system
+        files: ^courses/

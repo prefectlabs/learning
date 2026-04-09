@@ -77,6 +77,12 @@ jobs:
       - name: Set up Instruqt CLI
         uses: instruqt/cli/setup@v1
 
+      - name: Rebuild assets for validation
+        if: github.event_name == 'pull_request'
+        run: |
+          echo "🧱 Rebuilding assets for ${{ matrix.track }}"
+          bash scripts/build-course-assets.sh --check "${{ matrix.track }}"
+
       - name: Validate track
         if: github.event_name == 'pull_request'
         run: |
@@ -84,6 +90,12 @@ jobs:
           cd "${{ matrix.track }}"
           instruqt track validate
           echo "✅ Successfully validated ${{ matrix.track }}"
+
+      - name: Rebuild assets before push
+        if: github.event_name == 'push'
+        run: |
+          echo "🧱 Rebuilding assets for ${{ matrix.track }}"
+          bash scripts/build-course-assets.sh --apply "${{ matrix.track }}"
 
       - name: Push track
         if: github.event_name == 'push'

@@ -10,8 +10,8 @@ Effective Instruqt tracks serve three learner types:
 
 Every challenge should blend all three. A strong pattern:
 
-1. **Notes** (before the challenge) - Tell and Show. Use intro slides with text explanations, architecture diagrams, or short videos.
-2. **Assignment body** - Tell and Do. Start with a brief explanation of what the learner will do and why, then give step-by-step hands-on instructions.
+1. **Notes** (before the challenge) - Tell and Show. Start with a short prose introduction that explains what is happening, why it matters, and what the learner should notice before they begin. Use diagrams, screenshots, or short videos after that context when they help.
+2. **Assignment body** - Tell and Do. Start with a brief, prose-rich opening paragraph or two that explains what the learner will do and why, then give step-by-step hands-on instructions. Each step should have 1-3 sentences of explanation before the code block — the prose is where the teaching happens, the code block is where the doing happens. Both are required.
 3. **Tabs** - Do. Give learners terminals, editors, and dashboards to complete the task.
 4. **Check scripts** - Instant feedback to confirm the learner succeeded.
 
@@ -22,11 +22,15 @@ Every challenge should blend all three. A strong pattern:
 ````markdown
 # <Action Verb> + <Object>
 
-<1-5 sentences explaining what the learner will do and why it matters.>
+<1-2 short paragraphs explaining what the learner will do, why it matters, and
+how it connects to what they have seen so far. This is the teaching frame — do
+not skip it even when the task feels obvious.>
 
 ## Step 1: <Short description>
 
-<Brief explanation of this step.>
+<1-3 sentences explaining what this command or file does, why the learner is
+doing it now, and anything non-obvious about what will happen. A step that is
+just a heading and a code fence is too thin — the explanation is the teaching.>
 
 ```<language>
 <command or code the learner should run/write>
@@ -34,7 +38,8 @@ Every challenge should blend all three. A strong pattern:
 
 ## Step 2: <Short description>
 
-<Brief explanation.>
+<1-3 sentences, same pattern. Connect this step to the previous one if the
+relationship is not obvious.>
 
 ```<language>
 <command or code>
@@ -42,7 +47,9 @@ Every challenge should blend all three. A strong pattern:
 
 ## Verify
 
-<Tell the learner how to confirm their work before clicking Check.>
+<Tell the learner what success looks like — expected output, visible state, or a
+command they can run. Be concrete: "You should see two pods with status Running"
+is better than "Verify that it worked.">
 ````
 
 ### Tips
@@ -52,9 +59,9 @@ Every challenge should blend all three. A strong pattern:
 - **Be explicit.** Provide exact commands and file paths. Learners should not have to guess.
 - **Use code fences.** Wrap all commands and file contents in triple backticks with language hints.
 - **Add a Verify section.** Before the learner clicks Check, tell them what a successful result looks like (e.g., "You should see two pods with status Running").
-- **Use notes for context.** Heavy conceptual explanation belongs in notes (shown before the challenge), not in the assignment body. Keep the body action-oriented.
+- **Use notes for background, not as a substitute for in-body explanation.** Notes are for context the learner needs before they start — background concepts, architecture overviews, or "why this matters." The assignment body still needs its own opening paragraph and per-step explanations. If a step has no prose before its code fence, the body is too thin regardless of what the notes cover.
 - **Include images.** Architecture diagrams and UI screenshots make instructions much clearer. Reference them from `../assets/`.
-- **Progressive complexity.** Start with basic challenges and build. Early challenges should give exact commands; later ones can ask learners to figure things out with hints.
+- **Progressive complexity.** Start with the smallest working code example and build from there. Early challenges should give exact commands with few moving parts; later ones can ask learners to figure things out with hints. This applies to the *code and task scope* — not to the prose. Early challenges often need *more* explanation, not less, because the learner has less context.
 - **Time limits.** Set generous time limits. A challenge you can complete in 5 minutes should have a 20-minute limit (`timelimit: 1200`) to account for reading and mistakes.
 
 ## Track Design Patterns
@@ -64,6 +71,7 @@ These are general guidelines, not hard rules. The right design depends on the co
 ### Introductory track (beginner audience)
 - 4-6 challenges, basic difficulty
 - Every command spelled out
+- Smallest working examples first
 - Heavy use of notes with diagrams
 - Check scripts validate exact outcomes
 
@@ -110,18 +118,34 @@ until [ -f /opt/instruqt/bootstrap/host-bootstrap-completed ]; do
   sleep 1
 done
 
-# Install required software
-apt-get update
-apt-get install -y curl git jq
-
-# Clone example repo
-git clone https://github.com/example/repo.git /root/repo
-
-# Pre-pull container images (speeds up learner experience)
-docker pull nginx:1.24
+# Create a simple starting point for the learner
+mkdir -p /root/workspace
+printf 'Use this folder for the lab.\n' > /root/workspace/README.txt
 ```
 
 The bootstrap wait is important - it ensures the host is fully initialized before your setup script modifies the environment. Always include it in track-level setup scripts.
+
+### Script template: track setup with assets
+
+```bash
+#!/bin/bash
+set -euxo pipefail
+
+# Wait for Instruqt host bootstrap to finish
+until [ -f /opt/instruqt/bootstrap/host-bootstrap-completed ]; do
+  sleep 1
+done
+
+mkdir -p /root/workspace
+curl -LO "https://play.instruqt.com/assets/tracks/${INSTRUQT_TRACK_ID}/${ASSET_HASH}/assets/starter-files.tar.gz"
+tar -xzf starter-files.tar.gz -C /root/workspace
+```
+
+Use this pattern when a track-level setup script needs starter files from `assets/`. If you need several files, bundle them into a `.tar.gz` first and unpack them here.
+
+If a course uses generated assets, keep the source files in `asset-sources/` and let its `build-assets` script publish the tarball or other output into `assets/` before this setup step runs.
+
+When a bootstrap bundle is only needed by setup scripts, hide the asset reference in a Markdown comment so the file uploads without adding learner-facing noise.
 
 ### Script template: challenge setup
 
@@ -129,16 +153,8 @@ The bootstrap wait is important - it ensures the host is fully initialized befor
 #!/bin/bash
 set -euxo pipefail
 
-# Create files the learner will need for this challenge
 mkdir -p /root/workspace
-cat > /root/workspace/starter.yaml << 'EOF'
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: example
-data:
-  key: value
-EOF
+printf 'change me\n' > /root/workspace/message.txt
 ```
 
 Challenge setup scripts don't usually need the bootstrap wait because the track setup already completed.
@@ -149,16 +165,8 @@ Challenge setup scripts don't usually need the bootstrap wait because the track 
 #!/bin/bash
 set -euxo pipefail
 
-# Check that the learner created the expected deployment
-if ! kubectl get deployment nginx -o jsonpath='{.spec.replicas}' 2>/dev/null | grep -q "2"; then
-  fail-message "The nginx deployment should have 2 replicas. Check your deployment manifest and try again."
-  exit 1
-fi
-
-# Check that pods are running
-RUNNING=$(kubectl get pods -l app=nginx --field-selector=status.phase=Running --no-headers 2>/dev/null | wc -l)
-if [ "$RUNNING" -lt 2 ]; then
-  fail-message "Expected 2 running nginx pods, but found $RUNNING. Wait a moment and try again, or check your deployment."
+if ! grep -qx "done" /root/workspace/message.txt 2>/dev/null; then
+  fail-message "Put only done on the first line of /root/workspace/message.txt."
   exit 1
 fi
 ```
@@ -175,31 +183,7 @@ Key rules for check scripts:
 #!/bin/bash
 set -euxo pipefail
 
-# Automate the correct solution (used for skip and testing)
-cat > /root/manifests/deployment.yaml << 'EOF'
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: nginx
-spec:
-  replicas: 2
-  selector:
-    matchLabels:
-      app: nginx
-  template:
-    metadata:
-      labels:
-        app: nginx
-    spec:
-      containers:
-      - name: nginx
-        image: nginx:1.24
-        ports:
-        - containerPort: 80
-EOF
-
-kubectl apply -f /root/manifests/deployment.yaml
-kubectl rollout status deployment/nginx --timeout=60s
+printf 'done\n' > /root/workspace/message.txt
 ```
 
 Solve scripts must produce the exact state that the check script validates. They're essential for `instruqt track test` to work.
@@ -210,9 +194,7 @@ Solve scripts must produce the exact state that the check script validates. They
 #!/bin/bash
 set -euxo pipefail
 
-# Clean up resources from this challenge before the next one starts
-kubectl delete deployment nginx --ignore-not-found
-rm -f /root/manifests/deployment.yaml
+rm -f /root/workspace/message.txt /root/workspace/README.txt
 ```
 
 ---
