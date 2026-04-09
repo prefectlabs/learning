@@ -6,11 +6,24 @@ until [ -f /opt/instruqt/bootstrap/host-bootstrap-completed ]; do
 done
 
 apt-get update
-apt-get install -y curl git jq python3-pip python3-venv
+apt-get install -y python3-pip python3-venv
 
-TRACK_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-source "${TRACK_ROOT}/assets/project-dashboard/helpers.sh"
+WORKSPACE_ROOT="/root/project-dashboard"
+BOOTSTRAP_ROOT="/root/project-dashboard-bootstrap"
+ASSET_HASH="4a06528bfe608dfab93364995b683c2d"
 
-sync_stage "01-start"
-ensure_environment
-stop_preview
+pkill -f "fastmcp dev apps" || true
+rm -rf "${BOOTSTRAP_ROOT}" "${WORKSPACE_ROOT}"
+mkdir -p "${BOOTSTRAP_ROOT}" "${WORKSPACE_ROOT}"
+curl -fsSL -o /tmp/project-dashboard-bootstrap.tar.gz "https://play.instruqt.com/assets/tracks/${INSTRUQT_TRACK_ID}/${ASSET_HASH}/assets/project-dashboard-bootstrap.tar.gz"
+tar -xzf /tmp/project-dashboard-bootstrap.tar.gz -C "${BOOTSTRAP_ROOT}"
+cp -R "${BOOTSTRAP_ROOT}/project-dashboard-template/." "${WORKSPACE_ROOT}/"
+
+if [ ! -d "${WORKSPACE_ROOT}/.venv" ]; then
+  cd "${WORKSPACE_ROOT}"
+  python3 -m venv .venv
+  . .venv/bin/activate
+  python -m pip install -e .
+fi
+
+cp "${BOOTSTRAP_ROOT}/project-dashboard-stages/01-start/project_dashboard/server.py" "${WORKSPACE_ROOT}/project_dashboard/server.py"

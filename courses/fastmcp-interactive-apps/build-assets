@@ -1,0 +1,11 @@
+#!/bin/bash
+set -euxo pipefail
+
+TRACK_ROOT="$(cd "$(dirname "$0")" && pwd)"
+SOURCE_ROOT="${TRACK_ROOT}/asset-sources/project-dashboard-bootstrap"
+ASSET_ROOT="${TRACK_ROOT}/assets"
+BOOTSTRAP_TAR="${ASSET_ROOT}/project-dashboard-bootstrap.tar.gz"
+
+mkdir -p "${ASSET_ROOT}"
+
+tar -czf "${BOOTSTRAP_TAR}" -C "${SOURCE_ROOT}" project-dashboard-template project-dashboard-stages

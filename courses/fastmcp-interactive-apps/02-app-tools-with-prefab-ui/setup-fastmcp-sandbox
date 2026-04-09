@@ -8,4 +8,4 @@ pkill -f "fastmcp dev apps" || true
 mkdir -p "${WORKSPACE_ROOT}"
 find "${WORKSPACE_ROOT}" -mindepth 1 -maxdepth 1 ! -name '.venv' -exec rm -rf {} +
 cp -R "${BOOTSTRAP_ROOT}/project-dashboard-template/." "${WORKSPACE_ROOT}/"
-cp "${BOOTSTRAP_ROOT}/project-dashboard-stages/03-start/project_dashboard/server.py" "${WORKSPACE_ROOT}/project_dashboard/server.py"
+cp "${BOOTSTRAP_ROOT}/project-dashboard-stages/02-start/project_dashboard/server.py" "${WORKSPACE_ROOT}/project_dashboard/server.py"

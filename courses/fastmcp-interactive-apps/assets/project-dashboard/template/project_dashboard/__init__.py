@@ -1,1 +1,0 @@
-"""Project dashboard course package."""

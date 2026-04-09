@@ -1,9 +1,6 @@
 version: "3"
-virtualbrowsers:
-- name: fastmcp-app-preview
-  url: http://127.0.0.1:8080
 virtualmachines:
 - name: fastmcp-sandbox
-  image: ubuntu-os-cloud/ubuntu-2404-noble-amd64-v20241004
+  image: ubuntu-os-cloud/ubuntu-2404-noble-amd64-v20260316
   memory: 4096
   cpus: 1

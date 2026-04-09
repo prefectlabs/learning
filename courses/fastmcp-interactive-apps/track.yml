@@ -1,12 +1,13 @@
 slug: fastmcp-interactive-apps
 id: tewwlyhwm3cv
 title: Building Interactive Apps with FastMCP
-teaser: Build visual FastMCP tools with Prefab UI, forms, charts, and session-aware
-  workflows.
+teaser: Build tiny FastMCP apps, one small step at a time.
 description: |-
-  Move beyond text-in and text-out with interactive FastMCP apps. In this track, you'll build a Project Dashboard that renders visual status boards, collects structured input with forms, visualizes live metrics with charts, and carries state across tool invocations with the MCP context.
+  Move beyond text-in and text-out with interactive FastMCP apps. In this track, you'll build a Project Dashboard that starts with one tiny app, then adds prefab UI tools, charts backed by resource data, a form submission flow, and state that survives across interactions.
 
-  This course assumes you're already comfortable with FastMCP fundamentals. By the end, you'll know when to use `app=True`, when to graduate to `FastMCPApp`, and how to design multi-step app experiences that feel native inside an MCP conversation.
+  Each challenge stays small, but the ideas connect into a larger workflow: one tool renders UI, another turns data into charts, another collects form input, and another remembers a choice for the next interaction.
+
+  This course assumes you're already comfortable with FastMCP fundamentals. By the end, you'll know when to use `app=True`, when to graduate to `FastMCPApp`, and how to design small app experiences that feel native inside an MCP conversation.
 icon: ./assets/favicon.svg
 tags:
 - prefab
@@ -18,7 +19,6 @@ developers:
 - wayne@prefect.io
 - brendan.dalpe@prefect.io
 show_timer: true
-skipping_enabled: true
 idle_timeout: 1200
 timelimit: 3600
 lab_config:
@@ -33,5 +33,5 @@ lab_config:
   hideStopButton: false
   default_layout: AssignmentRight
   default_layout_sidebar_size: 33
-checksum: "230730789219854469"
+checksum: "2886731350356744696"
 enhanced_loading: false

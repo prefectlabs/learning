@@ -1,0 +1,15 @@
+{
+  "summary": {
+    "velocity": 3
+  },
+  "trend": [
+    {
+      "week": "W1",
+      "done": 1
+    },
+    {
+      "week": "W2",
+      "done": 3
+    }
+  ]
+}
