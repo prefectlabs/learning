@@ -1,0 +1,56 @@
+#!/bin/bash
+set -euxo pipefail
+
+export PATH="/root/.local/bin:$PATH"
+cd /root/quacksync
+
+cp quacksync/snapshots/flow_module_5_start.py quacksync/flow.py
+
+# Restore the clean tasks.py (module 5 starts from a post-module-4 fixed state).
+cat > quacksync/tasks.py <<'EOF'
+from __future__ import annotations
+
+import httpx
+from prefect import task
+
+from .database import pool
+from .scoring import ScorerConfig, score_record
+
+CATALOG_URL = "http://127.0.0.1:8000/ducks/{duck_id}"
+ENRICH_URL = "http://127.0.0.1:8000/enrichment/{duck_id}"
+
+
+@task
+def fetch_duck(duck_id: int) -> dict:
+    response = httpx.get(CATALOG_URL.format(duck_id=duck_id), timeout=5.0)
+    response.raise_for_status()
+    return response.json()
+
+
+@task
+def enrich_duck(duck: dict) -> dict:
+    response = httpx.get(ENRICH_URL.format(duck_id=duck["id"]), timeout=5.0)
+    response.raise_for_status()
+    enrichment = response.json()
+    return {**duck, **{k: v for k, v in enrichment.items() if k != "id"}}
+
+
+@task
+def score_duck(duck: dict) -> dict:
+    duck["score"] = score_record(duck, ScorerConfig())
+    return duck
+
+
+@task
+def write_duck(duck: dict) -> int:
+    pool.upsert_duck(duck)
+    return duck["id"]
+EOF
+
+rm -f quacksync.db
+
+./start-stack.sh
+
+# Best-effort cleanup of any previous global concurrency limit so learners
+# start fresh.
+uv run prefect gcl delete db-writes --yes >/dev/null 2>&1 || true

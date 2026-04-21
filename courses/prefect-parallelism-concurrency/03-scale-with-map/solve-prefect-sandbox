@@ -1,0 +1,57 @@
+#!/bin/bash
+set -euxo pipefail
+
+export PATH="/root/.local/bin:$PATH"
+cd /root/quacksync
+
+cat > quacksync/flow.py <<'EOF'
+from __future__ import annotations
+
+import json
+from pathlib import Path
+
+from prefect import flow, get_run_logger
+from prefect.states import State
+
+from .tasks import enrich_duck, fetch_duck, score_duck, write_duck
+
+SEEDS = Path(__file__).parent / "seeds"
+
+
+@flow(name="quacksync")
+def quacksync(duck_ids: list[int]) -> dict:
+    logger = get_run_logger()
+    logger.info(f"Processing {len(duck_ids)} ducks (mapped with partial failure)")
+
+    fetched = fetch_duck.map(duck_ids)
+    enriched_states: list[State] = enrich_duck.map(fetched, return_state=True)
+
+    succeeded = 0
+    failed_ids: list[int] = []
+    for duck_id, state in zip(duck_ids, enriched_states):
+        if state.is_completed():
+            duck = state.result()
+            duck = score_duck(duck)
+            write_duck(duck)
+            succeeded += 1
+        else:
+            failed_ids.append(duck_id)
+            logger.warning(f"Enrichment failed for duck {duck_id}: {state.type}")
+
+    summary = {
+        "total": len(duck_ids),
+        "succeeded": succeeded,
+        "failed": len(failed_ids),
+        "failed_ids": failed_ids,
+    }
+    logger.info(f"RunSummary: {summary}")
+    return summary
+
+
+if __name__ == "__main__":
+    duck_ids = json.loads((SEEDS / "ducks_500.json").read_text())
+    quacksync(duck_ids)
+EOF
+
+./start-stack.sh
+uv run python -m quacksync.flow

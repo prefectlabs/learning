@@ -1,0 +1,22 @@
+#!/bin/bash
+set -euxo pipefail
+
+export PATH="/root/.local/bin:$PATH"
+cd /root/quacksync
+
+./start-stack.sh
+
+uv run python -m quacksync.flow
+
+cat > notes.md <<'EOF'
+# QuackSync baseline notes
+
+## Stage classifications
+- fetch: I/O-bound. It's an HTTP call to the Duck Catalog API. The CPU is mostly idle while we wait for the response.
+- enrich: I/O-bound. Another HTTP call, this time to a rate-limited API, so it will also interact with limits later.
+- score: CPU-bound. It's a tight NumPy loop against a fixed reference matrix with no I/O at all.
+- write: I/O-bound. It executes a single UPSERT through a connection-pool-limited SQLite wrapper.
+
+## Prediction
+Parallelism will help fetch and enrich the most because they spend their time waiting on network I/O, so running multiple at once costs almost nothing extra. Threading should be enough there. Scoring is CPU-bound, so threads won't help much because of the GIL - we'll want a process pool. Writes look cheap today, but once the other stages fan out we'll suddenly try to open dozens of connections through a pool of 5, which is where I expect the first new problem to appear.
+EOF

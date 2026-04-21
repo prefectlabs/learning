@@ -1,0 +1,9 @@
+version: "3"
+virtualbrowsers:
+- name: prefect-ui
+  url: http://127.0.0.1:4200
+virtualmachines:
+- name: prefect-sandbox
+  image: ubuntu-os-cloud/ubuntu-2404-noble-amd64-v20241004
+  memory: 4096
+  cpus: 2

@@ -1,0 +1,35 @@
+#!/bin/bash
+set -euxo pipefail
+
+cd /root/quacksync
+
+if ! grep -q 'fetch_duck\.map' quacksync/flow.py; then
+  fail-message "quacksync/flow.py should call fetch_duck.map(...)"
+  exit 1
+fi
+
+if ! grep -q 'enrich_duck\.map' quacksync/flow.py; then
+  fail-message "quacksync/flow.py should call enrich_duck.map(...)"
+  exit 1
+fi
+
+if ! grep -q 'return_state=True' quacksync/flow.py; then
+  fail-message "enrich_duck.map should use return_state=True so you can handle per-item failures."
+  exit 1
+fi
+
+if ! grep -q 'ducks_500' quacksync/flow.py; then
+  fail-message "Update the flow's entry point to read ducks_500.json."
+  exit 1
+fi
+
+if [ ! -f quacksync.db ]; then
+  fail-message "Run 'uv run python -m quacksync.flow' before checking."
+  exit 1
+fi
+
+count=$(sqlite3 quacksync.db 'SELECT COUNT(*) FROM ducks;' 2>/dev/null || echo 0)
+if [ "$count" -lt 460 ] || [ "$count" -gt 495 ]; then
+  fail-message "Expected roughly 475 rows after skipping ~25 poisoned ducks, but found $count. Re-run the flow after updating the partial-failure handling."
+  exit 1
+fi

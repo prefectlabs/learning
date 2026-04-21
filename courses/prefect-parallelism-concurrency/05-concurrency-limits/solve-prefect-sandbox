@@ -1,0 +1,100 @@
+#!/bin/bash
+set -euxo pipefail
+
+export PATH="/root/.local/bin:$PATH"
+cd /root/quacksync
+
+cat > quacksync/tasks.py <<'EOF'
+from __future__ import annotations
+
+import httpx
+from prefect import task
+from prefect.concurrency.sync import concurrency
+
+from .database import pool
+from .scoring import ScorerConfig, score_record
+
+CATALOG_URL = "http://127.0.0.1:8000/ducks/{duck_id}"
+ENRICH_URL = "http://127.0.0.1:8000/enrichment/{duck_id}"
+
+
+@task
+def fetch_duck(duck_id: int) -> dict:
+    response = httpx.get(CATALOG_URL.format(duck_id=duck_id), timeout=5.0)
+    response.raise_for_status()
+    return response.json()
+
+
+@task
+def enrich_duck(duck: dict) -> dict:
+    response = httpx.get(ENRICH_URL.format(duck_id=duck["id"]), timeout=5.0)
+    response.raise_for_status()
+    enrichment = response.json()
+    return {**duck, **{k: v for k, v in enrichment.items() if k != "id"}}
+
+
+@task
+def score_duck(duck: dict) -> dict:
+    duck["score"] = score_record(duck, ScorerConfig())
+    return duck
+
+
+@task
+def write_duck(duck: dict) -> int:
+    with concurrency("db-writes", occupy=1):
+        pool.upsert_duck(duck)
+    return duck["id"]
+EOF
+
+cat > quacksync/flow.py <<'EOF'
+from __future__ import annotations
+
+import json
+from pathlib import Path
+
+from prefect import flow, get_run_logger
+from prefect.states import State
+from prefect.task_runners import ProcessPoolTaskRunner
+
+from .tasks import enrich_duck, fetch_duck, score_duck, write_duck
+
+SEEDS = Path(__file__).parent / "seeds"
+
+
+@flow(name="quacksync", task_runner=ProcessPoolTaskRunner(max_workers=4))
+def quacksync(duck_ids: list[int]) -> dict:
+    logger = get_run_logger()
+    logger.info(f"Processing {len(duck_ids)} ducks (writes throttled)")
+
+    fetched = fetch_duck.map(duck_ids)
+    enriched_states: list[State] = enrich_duck.map(fetched, return_state=True)
+
+    enriched = []
+    failed_ids: list[int] = []
+    for duck_id, state in zip(duck_ids, enriched_states):
+        if state.is_completed():
+            enriched.append(state.result())
+        else:
+            failed_ids.append(duck_id)
+
+    scored_futures = score_duck.map(enriched)
+    write_futures = write_duck.map(scored_futures)
+
+    written = 0
+    for future in write_futures:
+        future.result()
+        written += 1
+
+    return {"total": len(duck_ids), "succeeded": written, "failed": len(failed_ids)}
+
+
+if __name__ == "__main__":
+    duck_ids = json.loads((SEEDS / "ducks_500.json").read_text())
+    quacksync(duck_ids)
+EOF
+
+./start-stack.sh
+
+uv run prefect gcl delete db-writes --yes >/dev/null 2>&1 || true
+uv run prefect gcl create db-writes --limit 5
+uv run python -m quacksync.flow

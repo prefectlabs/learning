@@ -1,0 +1,37 @@
+#!/bin/bash
+set -euxo pipefail
+
+cd /root/quacksync
+
+if [ ! -f quacksync.db ]; then
+  fail-message "I can't find /root/quacksync/quacksync.db. Did you run 'uv run python -m quacksync.flow'?"
+  exit 1
+fi
+
+count=$(sqlite3 quacksync.db 'SELECT COUNT(*) FROM ducks;' 2>/dev/null || echo 0)
+if [ "$count" -lt 50 ]; then
+  fail-message "Expected at least 50 rows in the ducks table but found $count. Run the baseline flow against the 50-duck seed."
+  exit 1
+fi
+
+if [ ! -f notes.md ]; then
+  fail-message "Create /root/quacksync/notes.md with your stage classifications and prediction."
+  exit 1
+fi
+
+for stage in fetch enrich score write; do
+  if ! grep -qi "$stage" notes.md; then
+    fail-message "notes.md should mention every stage. Couldn't find '$stage'."
+    exit 1
+  fi
+done
+
+if ! grep -qi '^## Prediction' notes.md; then
+  fail-message "notes.md should include a '## Prediction' section with your hypothesis about parallelism."
+  exit 1
+fi
+
+if [ "$(wc -w < notes.md)" -lt 40 ]; then
+  fail-message "Your notes.md is quite short - add a sentence per stage and a few sentences of prediction."
+  exit 1
+fi

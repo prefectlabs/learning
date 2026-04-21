@@ -1,0 +1,45 @@
+#!/bin/bash
+set -euxo pipefail
+
+cd /root/quacksync
+
+if ! grep -q 'ProcessPoolTaskRunner' quacksync/flow.py; then
+  fail-message "Configure the flow with task_runner=ProcessPoolTaskRunner(...)."
+  exit 1
+fi
+
+if ! grep -q 'score_duck\.map' quacksync/flow.py; then
+  fail-message "Call score_duck.map(...) instead of scoring in a serial loop."
+  exit 1
+fi
+
+if grep -q 'DuckResult' quacksync/tasks.py; then
+  fail-message "tasks.py still defines DuckResult. Remove it (and the Lock) so the return value of score_duck pickles cleanly."
+  exit 1
+fi
+
+if grep -q 'from threading import Lock' quacksync/tasks.py; then
+  fail-message "The unused Lock import is still in tasks.py."
+  exit 1
+fi
+
+if [ ! -f quacksync.db ]; then
+  fail-message "Run the flow after fixing the pickling bug."
+  exit 1
+fi
+
+count=$(sqlite3 quacksync.db 'SELECT COUNT(*) FROM ducks;' 2>/dev/null || echo 0)
+if [ "$count" -lt 460 ]; then
+  fail-message "Expected roughly 475 rows but found $count. Re-run the flow after switching to the process pool."
+  exit 1
+fi
+
+if [ ! -f results-module-4.md ]; then
+  fail-message "Create results-module-4.md with your thread-pool vs process-pool comparison."
+  exit 1
+fi
+
+if ! grep -qi 'process pool' results-module-4.md; then
+  fail-message "results-module-4.md should mention the process pool run."
+  exit 1
+fi

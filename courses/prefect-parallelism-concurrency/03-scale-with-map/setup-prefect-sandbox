@@ -1,0 +1,10 @@
+#!/bin/bash
+set -euxo pipefail
+
+export PATH="/root/.local/bin:$PATH"
+cd /root/quacksync
+
+cp quacksync/snapshots/flow_module_3_start.py quacksync/flow.py
+rm -f quacksync.db
+
+./start-stack.sh

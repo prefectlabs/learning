@@ -1,0 +1,67 @@
+#!/bin/bash
+set -euxo pipefail
+
+export PATH="/root/.local/bin:$PATH"
+cd /root/quacksync
+
+cp quacksync/snapshots/flow_module_4_start.py quacksync/flow.py
+
+# Plant a realistic pickling bug in tasks.py: score_duck returns a DuckResult
+# subclass that carries a threading.Lock. Works fine with the default thread
+# pool runner; breaks loudly the first time you switch to ProcessPoolTaskRunner.
+cat > quacksync/tasks.py <<'EOF'
+from __future__ import annotations
+
+from threading import Lock
+
+import httpx
+from prefect import task
+
+from .database import pool
+from .scoring import ScorerConfig, score_record
+
+CATALOG_URL = "http://127.0.0.1:8000/ducks/{duck_id}"
+ENRICH_URL = "http://127.0.0.1:8000/enrichment/{duck_id}"
+
+
+class DuckResult(dict):
+    """Dict-ish container that also carries a Lock. Harmless under threads,
+    fatal under processes."""
+
+    def __init__(self, data):
+        super().__init__(data)
+        self._lock = Lock()
+
+
+@task
+def fetch_duck(duck_id: int) -> dict:
+    response = httpx.get(CATALOG_URL.format(duck_id=duck_id), timeout=5.0)
+    response.raise_for_status()
+    return response.json()
+
+
+@task
+def enrich_duck(duck: dict) -> dict:
+    response = httpx.get(ENRICH_URL.format(duck_id=duck["id"]), timeout=5.0)
+    response.raise_for_status()
+    enrichment = response.json()
+    return {**duck, **{k: v for k, v in enrichment.items() if k != "id"}}
+
+
+@task
+def score_duck(duck: dict) -> DuckResult:
+    scored = score_record(duck, ScorerConfig())
+    result = DuckResult(duck)
+    result["score"] = scored
+    return result
+
+
+@task
+def write_duck(duck: dict) -> int:
+    pool.upsert_duck(dict(duck))
+    return duck["id"]
+EOF
+
+rm -f quacksync.db results-module-4.md
+
+./start-stack.sh

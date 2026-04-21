@@ -1,0 +1,12 @@
+#!/bin/bash
+set -euxo pipefail
+
+export PATH="/root/.local/bin:$PATH"
+cd /root/quacksync
+
+# Reset to the Module 1 baseline. The track setup already populated it, but
+# run it again here so a learner who skipped or retried is on a clean slate.
+cp quacksync/snapshots/flow_module_2_start.py /dev/null 2>/dev/null || true
+# The shipped flow.py *is* the Module 1 baseline, so no copy is needed.
+
+rm -f quacksync.db notes.md

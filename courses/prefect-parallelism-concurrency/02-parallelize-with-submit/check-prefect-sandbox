@@ -1,0 +1,32 @@
+#!/bin/bash
+set -euxo pipefail
+
+cd /root/quacksync
+
+if ! grep -q 'fetch_duck\.submit' quacksync/flow.py; then
+  fail-message "quacksync/flow.py should call fetch_duck.submit(...)"
+  exit 1
+fi
+
+if ! grep -q 'enrich_duck\.submit' quacksync/flow.py; then
+  fail-message "quacksync/flow.py should call enrich_duck.submit(...)"
+  exit 1
+fi
+
+# Guard against the 'accidentally serial' bug: submitting fetch with a .result()
+# on an earlier future inside the comprehension.
+if grep -E 'fetch_duck\.submit\([^)]*\.result\(' quacksync/flow.py >/dev/null; then
+  fail-message "fetch_duck.submit is being called with a .result() - that re-serializes the flow. Pass the duck_id (or future) directly."
+  exit 1
+fi
+
+if ! [ -f quacksync.db ]; then
+  fail-message "Run 'uv run python -m quacksync.flow' after you chain submit(). Couldn't find quacksync.db."
+  exit 1
+fi
+
+count=$(sqlite3 quacksync.db 'SELECT COUNT(*) FROM ducks;' 2>/dev/null || echo 0)
+if [ "$count" -lt 50 ]; then
+  fail-message "Expected 50 rows in the ducks table but found $count. Run the flow end-to-end."
+  exit 1
+fi

@@ -1,0 +1,44 @@
+slug: prefect-parallelism-concurrency
+title: "Scaling Workflows with Prefect: Parallelism, Concurrency & Rate Limits"
+teaser: Scale a Prefect pipeline up with parallelism and down with concurrency and rate limits, one primitive at a time.
+description: |-
+  A hands-on, six-module course that teaches you how to scale Prefect workflows
+  in both directions: **up** with parallelism for speed and throughput, and
+  **down** with concurrency and rate limits to protect shared resources and
+  respect external APIs.
+
+  You'll evolve a single pipeline - **QuackSync**, which syncs a rubber duck
+  store's catalog - from a slow sequential baseline into a production-grade,
+  well-behaved flow. Along the way you'll use `.submit()`, `.map()`, task
+  runners, global concurrency limits, rate limits, and deployment-level
+  concurrency.
+
+  By the end, you'll know which primitive to reach for when your pipeline is
+  too slow, when it's overwhelming a database, and when it's getting throttled
+  by an upstream API.
+icon: ./assets/logo-mark.svg
+tags:
+- draft
+- prefect
+- intermediate
+- parallelism
+- concurrency
+owner: prefect
+developers:
+- brendan.dalpe@prefect.io
+maintenance: true
+show_timer: true
+skipping_enabled: true
+idle_timeout: 1200
+timelimit: 10800
+lab_config:
+  extend_ttl: 1200
+  sidebar_enabled: true
+  feedback_recap_enabled: true
+  feedback_tab_enabled: false
+  loadingMessages: true
+  override_challenge_layout: false
+  hideStopButton: false
+  default_layout: AssignmentRight
+  default_layout_sidebar_size: 33
+enhanced_loading: false

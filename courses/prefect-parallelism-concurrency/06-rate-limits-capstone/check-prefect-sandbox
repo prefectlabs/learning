@@ -1,0 +1,40 @@
+#!/bin/bash
+set -euxo pipefail
+
+export PATH="/root/.local/bin:$PATH"
+cd /root/quacksync
+
+if ! grep -q 'rate_limit(' quacksync/tasks.py; then
+  fail-message "enrich_duck should call rate_limit(\"enrichment-api-rps\", ...)"
+  exit 1
+fi
+
+if ! grep -q 'enrichment-api-conns' quacksync/tasks.py; then
+  fail-message "enrich_duck should use a concurrency(\"enrichment-api-conns\", ...) block."
+  exit 1
+fi
+
+if ! grep -Eq 'retries\s*=' quacksync/tasks.py; then
+  fail-message "Add retries with backoff and jitter to enrich_duck so residual 429s heal automatically."
+  exit 1
+fi
+
+if ! uv run prefect gcl inspect enrichment-api-rps >/dev/null 2>&1; then
+  fail-message "Create the global concurrency limit 'enrichment-api-rps' (10 slots, slot-decay-per-second 10)."
+  exit 1
+fi
+
+if ! uv run prefect gcl inspect enrichment-api-conns >/dev/null 2>&1; then
+  fail-message "Create the global concurrency limit 'enrichment-api-conns' with a limit of 3."
+  exit 1
+fi
+
+if ! grep -q 'concurrency_limit=2' quacksync/flow.py; then
+  fail-message "The deployment should set concurrency_limit=2."
+  exit 1
+fi
+
+if ! uv run prefect deployment inspect quacksync/quacksync-local >/dev/null 2>&1; then
+  fail-message "Register the deployment with 'uv run python -m quacksync.flow deploy' before checking."
+  exit 1
+fi
