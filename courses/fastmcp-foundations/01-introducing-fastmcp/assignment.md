@@ -267,7 +267,7 @@ Horizon is the fastest way to deploy your MCP server. It's completely free to tr
 
 **Step 1: Visit Horizon**
 
-Open [horizon.prefect.io](tab-Horizon) in a new tab and sign in with your GitHub account.
+Open [horizon.prefect.io](#tab-2) in a new tab and sign in with your GitHub account.
 
 **Step 2: Create a New Project**
 
