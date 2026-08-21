@@ -15,9 +15,9 @@ tabs:
   hostname: fastmcp-sandbox
   path: /root
 - id: oz9yjcrkbbvp
-  title: FastMCP Cloud
+  title: Horizon
   type: browser
-  hostname: fastmcp-cloud
+  hostname: horizon
 difficulty: ""
 enhanced_loading: null
 ---
@@ -211,7 +211,7 @@ When an LLM calls the tool, your function runs and returns a string. FastMCP han
 GitHub Setup and Deployment
 ===
 
-Get your code on GitHub so FastMCP Cloud can deploy it.
+Get your code on GitHub so Horizon can deploy it.
 
 **Install GitHub CLI if needed:**
 
@@ -258,16 +258,16 @@ git remote -v
 git log --oneline
 ```
 
-Your project is now at `https://github.com/YOUR_USERNAME/mcp-demo`. FastMCP Cloud will deploy directly from this repository.
+Your project is now at `https://github.com/YOUR_USERNAME/mcp-demo`. Horizon will deploy directly from this repository.
 
-Deploy to FastMCP Cloud
+Deploy to Prefect Horizon
 ===
 
-FastMCP Cloud is the fastest way to deploy your MCP server. It's completely free while in beta!
+Horizon is the fastest way to deploy your MCP server. It's completely free to try!
 
-**Step 1: Visit FastMCP Cloud**
+**Step 1: Visit Horizon**
 
-Open [fastmcp.cloud](tab-FastMCP-Cloud) in a new tab and sign in with your GitHub account.
+Open [horizon.prefect.io](#tab-2) in a new tab and sign in with your GitHub account.
 
 **Step 2: Create a New Project**
 
@@ -287,7 +287,7 @@ Configure your project settings:
 
 **Step 4: Deploy**
 
-Click **"Deploy"** or **"Save"**. FastMCP Cloud will:
+Click **"Deploy"** or **"Save"**. Horizon will:
 1. Clone your repository
 2. Install dependencies from `pyproject.toml`
 3. Build your FastMCP server
@@ -304,7 +304,7 @@ Copy this URL. You'll need it to connect clients.
 
 **Automatic Redeployments**
 
-FastMCP Cloud watches your repo and redeploys when you push to `main`. It also deploys preview servers for every PR.
+Horizon watches your repo and redeploys when you push to `main`. It also deploys preview servers for every PR.
 
 Interact with Your Server
 ===
@@ -389,7 +389,7 @@ Now Cursor can use your weather tools in the editor.
 
 **Security for Production**
 
-Enable authentication in FastMCP Cloud settings:
+Enable authentication in Horizon settings:
 - Only your organization members can connect
 - Use environment variables for API keys
 - Consider rate limiting
@@ -402,14 +402,14 @@ You just built and deployed a production MCP server.
 **What you did:**
 
 - Created three weather tools using FastMCP
-- Deployed to FastMCP Cloud with zero infrastructure
+- Deployed to Horizon with zero infrastructure
 - Connected multiple clients
 
 **Key points:**
 
 - MCP standardizes LLM-tool connections
 - FastMCP makes it Pythonic
-- FastMCP Cloud handles deployment
+- Horizon handles deployment
 - One server, many clients
 
 **Next steps:**
@@ -422,8 +422,8 @@ You just built and deployed a production MCP server.
 **Resources:**
 
 - [FastMCP Docs](https://gofastmcp.com/)
-- [Deployment Guide](https://gofastmcp.com/deployment/fastmcp-cloud)
+- [Deployment Guide](https://gofastmcp.com/deployment/prefect-horizon)
 - [MCP Spec](https://modelcontextprotocol.io/)
-- [GitHub](https://github.com/jlowin/fastmcp)
+- [GitHub](https://github.com/prefecthq/fastmcp)
 
 That's it. You've got a working MCP server that connects LLMs to weather data. Now go build something useful.

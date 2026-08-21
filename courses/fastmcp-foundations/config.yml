@@ -1,7 +1,7 @@
 version: "3"
 virtualbrowsers:
-- name: fastmcp-cloud
-  url: https://auth.fastmcp.cloud
+- name: horizon
+  url: https://auth.horizon.prefect.io
 virtualmachines:
 - name: fastmcp-sandbox
   image: ubuntu-os-cloud/ubuntu-2404-noble-amd64-v20241004
