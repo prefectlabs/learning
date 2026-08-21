@@ -260,7 +260,7 @@ git log --oneline
 
 Your project is now at `https://github.com/YOUR_USERNAME/mcp-demo`. Horizon will deploy directly from this repository.
 
-Deploy to Prefect MCP Gateway
+Deploy to Prefect Horizon
 ===
 
 Horizon is the fastest way to deploy your MCP server. It's completely free to try!
