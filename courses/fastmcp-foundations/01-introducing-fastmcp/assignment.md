@@ -424,6 +424,6 @@ You just built and deployed a production MCP server.
 - [FastMCP Docs](https://gofastmcp.com/)
 - [Deployment Guide](https://gofastmcp.com/deployment/prefect-horizon)
 - [MCP Spec](https://modelcontextprotocol.io/)
-- [GitHub](https://github.com/jlowin/fastmcp)
+- [GitHub](https://github.com/prefecthq/fastmcp)
 
 That's it. You've got a working MCP server that connects LLMs to weather data. Now go build something useful.
