@@ -18,7 +18,8 @@ tabs:
   title: Horizon
   type: browser
   hostname: horizon
-- title: MCP Inspector
+- id: mz9aagmgykir
+  title: MCP Inspector
   type: service
   hostname: mcp-inspector
   port: 6274
@@ -357,7 +358,7 @@ When Playground connects, it requests the server's tool list and displays the na
 
 A similar open source MCP developer tool is the [MCP Inspector](https://github.com/modelcontextprotocol/inspector). It works the same way as Horizon's Playground, but is a standalone web app. To use it:
 
-1. Open the [MCP Inspector](#tab-4) tab.
+1. Open the [MCP Inspector](#tab-3) tab.
 2. Paste your server URL into the "Server URL" field and click **Connect**.
 3. If authentication is enabled, the inspector will follow the OAuth flow to get an access token. Otherwise, it will connect directly.
 4. Click on the **Tools** tab. You should see the same list of tools as in Horizon's Playground. Select a tool to inspect its schema and invoke it with test arguments.
