@@ -18,11 +18,6 @@ tabs:
   title: Horizon
   type: browser
   hostname: horizon
-- id: mz9aagmgykir
-  title: MCP Inspector
-  type: service
-  hostname: mcp-inspector
-  port: 6274
 difficulty: ""
 enhanced_loading: null
 ---
@@ -353,15 +348,6 @@ You should see a list of tools containing `get_weather_forecast`, `get_historica
 **How It Works**
 
 When Playground connects, it requests the server's tool list and displays the names, descriptions, and input schemas produced by FastMCP. Inspector does not use an LLM to translate natural-language questions; you choose a tool, provide its arguments, and inspect the result directly. This makes it useful for verifying the MCP interface before connecting the server to an AI assistant.
-
-**Testing with the MCP Inspector (optional)**
-
-A similar open source MCP developer tool is the [MCP Inspector](https://github.com/modelcontextprotocol/inspector). It works the same way as Horizon's Playground, but is a standalone web app. To use it:
-
-1. Open the [MCP Inspector](#tab-3) tab.
-2. Paste your server URL into the "Server URL" field and click **Connect**.
-3. If authentication is enabled, the inspector will follow the OAuth flow to get an access token. Otherwise, it will connect directly.
-4. Click on the **Tools** tab. You should see the same list of tools as in Horizon's Playground. Select a tool to inspect its schema and invoke it with test arguments.
 
 **Testing with Python Client**
 
