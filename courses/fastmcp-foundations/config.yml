@@ -1,4 +1,16 @@
 version: "3"
+containers:
+- name: mcp-inspector
+  image: ghcr.io/modelcontextprotocol/inspector:1.0.0
+  cmd: "-- --server-url https://<your-server>.fastmcp.cloud/mcp --transport streamable-http"
+  ports:
+  - 6274
+  - 6277
+  environment:
+    HOST: 0.0.0.0
+    MCP_AUTO_OPEN_ENABLED: "false"
+    DANGEROUSLY_OMIT_AUTH: "true"
+  memory: 512
 virtualbrowsers:
 - name: horizon
   url: https://auth.horizon.prefect.io

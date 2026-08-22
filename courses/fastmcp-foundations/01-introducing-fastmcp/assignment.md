@@ -18,6 +18,10 @@ tabs:
   title: Horizon
   type: browser
   hostname: horizon
+- title: MCP Inspector
+  type: service
+  hostname: mcp-inspector
+  port: 6274
 difficulty: ""
 enhanced_loading: null
 ---
