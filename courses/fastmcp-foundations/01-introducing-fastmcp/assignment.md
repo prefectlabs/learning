@@ -310,24 +310,18 @@ Copy this URL. You'll need it to connect clients.
 
 Horizon watches your repo and redeploys when you push to `main`. It also deploys preview servers for every PR.
 
-Interact with Your Server
+Testing Your New MCP Server
 ===
 
 Connect to your deployed server and test it.
 
 **Using ChatMCP**
 
-1. Visit [chatmcp.com](tab-ChatMCP)
-2. Click **"Connect to Server"**
-3. Enter your server URL: `https://your-project-name.fastmcp.app/mcp`
-4. Click **"Connect"**
+ChatMCP is a simple LLM web client for testing MCP Servers in Horizon. It works the same way as services like ChatGPT or Claude, and provides a pre-configured connection to your deployed MCP server. To try it:
 
-**Try these queries:**
-
-- "What's the weather forecast for San Francisco?"
-- "What was the weather in New York on July 4th, 2023?"
-- "What's the chance of rain in Seattle next Tuesday?"
-- "Will it rain in London on December 25th this year?"
+1. Open the [horizon.prefect.io](#tab-2) Tab.
+2. Click on the name of your server on the list of servers in the registry (if you're not already in the server context).
+3. Click **ChatMCP** in the left-hand menu.
 
 **How It Works**
 
