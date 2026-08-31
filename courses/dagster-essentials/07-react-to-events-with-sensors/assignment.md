@@ -48,7 +48,7 @@ tabs:
   type: service
   hostname: dagster-sandbox
   port: 3000
-difficulty: basic-intermediate
+difficulty: intermediate
 timelimit: 2400
 ---
 Your stakeholders keep asking the same shape of question. How did the December holidays change rush hour ridership in Manhattan? What did the second week of January look like in Staten Island? Every answer is the same motion: write a query, filter to a borough and a date range, build a chart, paste it into Slack. Twenty minutes you do not get back, several times a week.

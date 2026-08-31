@@ -50,7 +50,7 @@ tabs:
   type: service
   hostname: dagster-sandbox
   port: 3000
-difficulty: basic-intermediate
+difficulty: intermediate
 timelimit: 2400
 ---
 
