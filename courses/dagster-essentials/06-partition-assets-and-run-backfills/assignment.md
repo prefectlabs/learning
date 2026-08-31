@@ -41,11 +41,13 @@ tabs:
   type: terminal
   hostname: dagster-sandbox
   workdir: /root/project-dagster-university/dagster_university/dagster_essentials
+  cmd: /bin/bash
 - id: aexuwwje2bfp
   title: Dagster Dev
   type: terminal
   hostname: dagster-sandbox
   workdir: /root/project-dagster-university/dagster_university/dagster_essentials
+  cmd: /bin/bash
 - id: 1zoqy62strlp
   title: Code Editor
   type: code

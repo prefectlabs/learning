@@ -45,11 +45,13 @@ tabs:
   type: terminal
   hostname: dagster-sandbox
   workdir: /root/project-dagster-university/dagster_university/dagster_essentials
+  cmd: /bin/bash
 - id: y1jd9mxtxdy8
   title: Dagster Dev
   type: terminal
   hostname: dagster-sandbox
   workdir: /root/project-dagster-university/dagster_university/dagster_essentials
+  cmd: /bin/bash
 - id: fhloilhvwijo
   title: Code Editor
   type: code

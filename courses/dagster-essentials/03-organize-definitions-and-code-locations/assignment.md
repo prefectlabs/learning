@@ -37,11 +37,13 @@ tabs:
   type: terminal
   hostname: dagster-sandbox
   workdir: /root/project-dagster-university/dagster_university/dagster_essentials
+  cmd: /bin/bash
 - id: nedgr177fycl
   title: Dagster Dev
   type: terminal
   hostname: dagster-sandbox
   workdir: /root/project-dagster-university/dagster_university/dagster_essentials
+  cmd: /bin/bash
 - id: ihzxsupmyurh
   title: Code Editor
   type: code

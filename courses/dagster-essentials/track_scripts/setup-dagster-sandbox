@@ -31,6 +31,8 @@ ln -sf /root/.local/bin/uv /usr/local/bin/uv
 ln -sf /root/.local/bin/uvx /usr/local/bin/uvx
 ln -sf "$PROJECT_DIR/.venv/bin/dg" /usr/local/bin/dg
 ln -sf "$PROJECT_DIR/.venv/bin/dagster" /usr/local/bin/dagster
+ln -sf "$PROJECT_DIR/.venv/bin/python" /usr/local/bin/python
+ln -sf "$PROJECT_DIR/.venv/bin/pytest" /usr/local/bin/pytest
 
 cat > /etc/profile.d/dagster-course.sh <<'EOF'
 export PATH="/root/.local/bin:$PATH"
