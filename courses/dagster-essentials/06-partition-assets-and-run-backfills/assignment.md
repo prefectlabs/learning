@@ -1,8 +1,10 @@
 ---
 slug: partition-assets-and-run-backfills
+id: 3hxnzxoszzal
 type: challenge
 title: Partition Assets and Run Backfills
-teaser: Slice the taxi data by month and week, then backfill three months of history in a single click.
+teaser: Slice the taxi data by month and week, then backfill three months of history
+  in a single click.
 notes:
 - type: text
   contents: |-
@@ -34,24 +36,29 @@ notes:
 
     In this challenge you will partition the trip assets by month, partition the weekly metric by week, point both jobs at those partitions, and then backfill three months of NYC taxi data from the Dagster UI.
 tabs:
-- title: Terminal
+- id: svwxqrmuwdyk
+  title: Terminal
   type: terminal
   hostname: dagster-sandbox
   workdir: /root/project-dagster-university/dagster_university/dagster_essentials
-- title: Dagster Dev
+- id: aexuwwje2bfp
+  title: Dagster Dev
   type: terminal
   hostname: dagster-sandbox
   workdir: /root/project-dagster-university/dagster_university/dagster_essentials
-- title: Code Editor
+- id: 1zoqy62strlp
+  title: Code Editor
   type: code
   hostname: dagster-sandbox
   path: /root/project-dagster-university/dagster_university/dagster_essentials
-- title: Dagster UI
+- id: z9ajreayuovz
+  title: Dagster UI
   type: service
   hostname: dagster-sandbox
   port: 3000
 difficulty: intermediate
 timelimit: 2400
+enhanced_loading: null
 ---
 
 Your pipeline has a hard-coded month in it. `taxi_trips_file` fetches `2023-03` and nothing else, and `taxi_trips` replaces the whole `trips` table on every run. To load January, you would edit the code. To load February, you would edit it again. That is not a pipeline, that is a script with a scheduler bolted on.

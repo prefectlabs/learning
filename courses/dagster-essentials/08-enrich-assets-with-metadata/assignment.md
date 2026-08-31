@@ -1,8 +1,10 @@
 ---
 slug: enrich-assets-with-metadata
+id: qls2gkzwdnr3
 type: challenge
 title: Enrich Assets with Metadata
-teaser: Add descriptions, asset groups, row counts, and a rendered chart, so the pipeline explains itself.
+teaser: Add descriptions, asset groups, row counts, and a rendered chart, so the pipeline
+  explains itself.
 notes:
 - type: text
   contents: |-
@@ -34,24 +36,29 @@ notes:
 
     The code changes are small. Watch what they do to the asset graph.
 tabs:
-- title: Terminal
+- id: sc4fgzeaybm2
+  title: Terminal
   type: terminal
   hostname: dagster-sandbox
   workdir: /root/project-dagster-university/dagster_university/dagster_essentials
-- title: Dagster Dev
+- id: uzk5uguxvbxl
+  title: Dagster Dev
   type: terminal
   hostname: dagster-sandbox
   workdir: /root/project-dagster-university/dagster_university/dagster_essentials
-- title: Code Editor
+- id: xgkrj01k4cc9
+  title: Code Editor
   type: code
   hostname: dagster-sandbox
   path: /root/project-dagster-university/dagster_university/dagster_essentials
-- title: Dagster UI
+- id: opbazdxdrshv
+  title: Dagster UI
   type: service
   hostname: dagster-sandbox
   port: 3000
 difficulty: basic
 timelimit: 1500
+enhanced_loading: null
 ---
 Enrich Assets with Metadata
 ===

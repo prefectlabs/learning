@@ -1,4 +1,5 @@
 slug: dagster-essentials
+id: fszlwlrdworj
 title: Dagster Essentials
 teaser: Learn the fundamentals of Dagster. Build an asset-centric data pipeline with
   dependencies, resources, schedules, partitions, and sensors.
@@ -31,4 +32,5 @@ lab_config:
   hideStopButton: false
   default_layout: AssignmentRight
   default_layout_sidebar_size: 33
+checksum: "11792412248627197145"
 enhanced_loading: false

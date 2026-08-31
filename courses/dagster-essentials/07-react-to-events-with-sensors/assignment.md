@@ -1,8 +1,10 @@
 ---
 slug: react-to-events-with-sensors
+id: m9fykflovi08
 type: challenge
 title: React to Events with Sensors
-teaser: Build a sensor that watches a directory and launches a run for every request that lands in it.
+teaser: Build a sensor that watches a directory and launches a run for every request
+  that lands in it.
 notes:
 - type: text
   contents: |-
@@ -32,24 +34,29 @@ notes:
 
     You will use it here to pass a borough and a date range from a JSON request file straight into the asset that builds the report.
 tabs:
-- title: Terminal
+- id: 1cwoc5xn8vzg
+  title: Terminal
   type: terminal
   hostname: dagster-sandbox
   workdir: /root/project-dagster-university/dagster_university/dagster_essentials
-- title: Dagster Dev
+- id: dazvbypy2ser
+  title: Dagster Dev
   type: terminal
   hostname: dagster-sandbox
   workdir: /root/project-dagster-university/dagster_university/dagster_essentials
-- title: Code Editor
+- id: 8ylrdlrk2q6d
+  title: Code Editor
   type: code
   hostname: dagster-sandbox
   path: /root/project-dagster-university/dagster_university/dagster_essentials
-- title: Dagster UI
+- id: hcjzi5rbh4zd
+  title: Dagster UI
   type: service
   hostname: dagster-sandbox
   port: 3000
 difficulty: intermediate
 timelimit: 2400
+enhanced_loading: null
 ---
 Your stakeholders keep asking the same shape of question. How did the December holidays change rush hour ridership in Manhattan? What did the second week of January look like in Staten Island? Every answer is the same motion: write a query, filter to a borough and a date range, build a chart, paste it into Slack. Twenty minutes you do not get back, several times a week.
 

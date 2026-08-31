@@ -1,8 +1,10 @@
 ---
 slug: automate-with-jobs-and-schedules
+id: jukk0ehyb42y
 type: challenge
 title: Automate with Jobs and Schedules
-teaser: Slice your asset graph into jobs, attach cron schedules, and stop clicking Materialize.
+teaser: Slice your asset graph into jobs, attach cron schedules, and stop clicking
+  Materialize.
 notes:
 - type: text
   contents: |-
@@ -50,24 +52,29 @@ notes:
 
     Two things to notice while you work: schedules ship **off** by default, and nothing fires until the daemon is running. If a schedule looks correct and still never runs, those are the first two places to look.
 tabs:
-- title: Terminal
+- id: zoxmpirnlubz
+  title: Terminal
   type: terminal
   hostname: dagster-sandbox
   workdir: /root/project-dagster-university/dagster_university/dagster_essentials
-- title: Dagster Dev
+- id: cf77w8chijsd
+  title: Dagster Dev
   type: terminal
   hostname: dagster-sandbox
   workdir: /root/project-dagster-university/dagster_university/dagster_essentials
-- title: Code Editor
+- id: 8g3sv9b1nqbi
+  title: Code Editor
   type: code
   hostname: dagster-sandbox
   path: /root/project-dagster-university/dagster_university/dagster_essentials
-- title: Dagster UI
+- id: itfb3pisbhyq
+  title: Dagster UI
   type: service
   hostname: dagster-sandbox
   port: 3000
 difficulty: basic
 timelimit: 1500
+enhanced_loading: null
 ---
 Every asset you have materialized so far started with a human clicking a button. That is fine for building a pipeline. It is a bad way to run one. An orchestrator earns its name by kicking off work when nobody is watching, and the simplest way to get there is a schedule.
 

@@ -1,8 +1,10 @@
 ---
 slug: share-connections-with-resources
+id: maxfnxu6pwj5
 type: challenge
 title: Share Connections with Resources
-teaser: Pull four copies of the same DuckDB connection into one resource your assets borrow.
+teaser: Pull four copies of the same DuckDB connection into one resource your assets
+  borrow.
 notes:
 - type: text
   contents: |-
@@ -32,24 +34,29 @@ notes:
 
     It also makes swapping environments a config change instead of a code change. Same assets, a local DuckDB file in development, something much bigger in production.
 tabs:
-- title: Terminal
+- id: igsssxgm7d5x
+  title: Terminal
   type: terminal
   hostname: dagster-sandbox
   workdir: /root/project-dagster-university/dagster_university/dagster_essentials
-- title: Dagster Dev
+- id: oc6y9o5ew3zy
+  title: Dagster Dev
   type: terminal
   hostname: dagster-sandbox
   workdir: /root/project-dagster-university/dagster_university/dagster_essentials
-- title: Code Editor
+- id: ugxsot1vhq3j
+  title: Code Editor
   type: code
   hostname: dagster-sandbox
   path: /root/project-dagster-university/dagster_university/dagster_essentials
-- title: Dagster UI
+- id: a6egelsbdsfb
+  title: Dagster UI
   type: service
   hostname: dagster-sandbox
   port: 3000
 difficulty: basic
 timelimit: 1800
+enhanced_loading: null
 ---
 You have seven assets now, split across `trips.py` and `metrics.py`, and four of them open the same way: connect to DuckDB, run a query, move on. That connection code is copy-pasted. It works, and it will keep working right up until the day the connection needs to change.
 

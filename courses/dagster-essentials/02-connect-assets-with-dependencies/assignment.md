@@ -1,8 +1,10 @@
 ---
 slug: connect-assets-with-dependencies
+id: 7dkpriynqsck
 type: challenge
 title: Connect Assets with Dependencies
-teaser: Declare dependencies with deps, load raw files into DuckDB, and watch Dagster run the graph in order.
+teaser: Declare dependencies with deps, load raw files into DuckDB, and watch Dagster
+  run the graph in order.
 notes:
 - type: text
   contents: |-
@@ -38,24 +40,29 @@ notes:
 
     Both are assets. The `@dg.asset` decorator does not care which one you chose, and neither does the lineage graph. You'll write one of each in this challenge, and the deciding question is usually simple: how much data has to be in memory at once, and does a library exist that does this better than SQL?
 tabs:
-- title: Terminal
+- id: eyixtwjhfhaa
+  title: Terminal
   type: terminal
   hostname: dagster-sandbox
   workdir: /root/project-dagster-university/dagster_university/dagster_essentials
-- title: Dagster Dev
+- id: y1jd9mxtxdy8
+  title: Dagster Dev
   type: terminal
   hostname: dagster-sandbox
   workdir: /root/project-dagster-university/dagster_university/dagster_essentials
-- title: Code Editor
+- id: fhloilhvwijo
+  title: Code Editor
   type: code
   hostname: dagster-sandbox
   path: /root/project-dagster-university/dagster_university/dagster_essentials
-- title: Dagster UI
+- id: mp2bccjcsm7a
+  title: Dagster UI
   type: service
   hostname: dagster-sandbox
   port: 3000
 difficulty: basic
 timelimit: 1800
+enhanced_loading: null
 ---
 Connect Assets with Dependencies
 ===

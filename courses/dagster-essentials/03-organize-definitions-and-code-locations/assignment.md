@@ -1,8 +1,10 @@
 ---
 slug: organize-definitions-and-code-locations
+id: 2o07t9ln4cmc
 type: challenge
 title: Organize Definitions and Code Locations
-teaser: Find out how Dagster discovers your assets, and why code locations keep teams out of each other's way.
+teaser: Find out how Dagster discovers your assets, and why code locations keep teams
+  out of each other's way.
 notes:
 - type: text
   contents: |-
@@ -30,24 +32,29 @@ notes:
 
     You will cause one of those failures on purpose, read the error the way you would read it on a real project, and then reload the code location to bring it back. Knowing where that error surfaces is the difference between a two-minute fix and an afternoon.
 tabs:
-- title: Terminal
+- id: h3quuqdyhgzu
+  title: Terminal
   type: terminal
   hostname: dagster-sandbox
   workdir: /root/project-dagster-university/dagster_university/dagster_essentials
-- title: Dagster Dev
+- id: nedgr177fycl
+  title: Dagster Dev
   type: terminal
   hostname: dagster-sandbox
   workdir: /root/project-dagster-university/dagster_university/dagster_essentials
-- title: Code Editor
+- id: ihzxsupmyurh
+  title: Code Editor
   type: code
   hostname: dagster-sandbox
   path: /root/project-dagster-university/dagster_university/dagster_essentials
-- title: Dagster UI
+- id: v79t9usda3ua
+  title: Dagster UI
   type: service
   hostname: dagster-sandbox
   port: 3000
 difficulty: basic
 timelimit: 1200
+enhanced_loading: null
 ---
 Where your assets actually live
 ===

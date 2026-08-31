@@ -1,8 +1,10 @@
 ---
 slug: define-your-first-asset
+id: dmxcjsido5ga
 type: challenge
 title: Define Your First Asset
-teaser: Scaffold, write, and materialize a Dagster asset that pulls real NYC taxi data to disk.
+teaser: Scaffold, write, and materialize a Dagster asset that pulls real NYC taxi
+  data to disk.
 notes:
 - type: text
   contents: |-
@@ -71,24 +73,29 @@ notes:
 
     This challenge is the first link in that chain. You'll scaffold an asset file, write an asset that downloads a month of trip records, watch it materialize in the Dagster UI, break it on purpose to see what failure looks like, and then write a second asset on your own.
 tabs:
-- title: Terminal
+- id: oaq9jixca7ay
+  title: Terminal
   type: terminal
   hostname: dagster-sandbox
   workdir: /root/project-dagster-university/dagster_university/dagster_essentials
-- title: Dagster Dev
+- id: r8wrvnljkn3v
+  title: Dagster Dev
   type: terminal
   hostname: dagster-sandbox
   workdir: /root/project-dagster-university/dagster_university/dagster_essentials
-- title: Code Editor
+- id: ilvjz4wudvsf
+  title: Code Editor
   type: code
   hostname: dagster-sandbox
   path: /root/project-dagster-university/dagster_university/dagster_essentials
-- title: Dagster UI
+- id: dhyubiebpg4l
+  title: Dagster UI
   type: service
   hostname: dagster-sandbox
   port: 3000
 difficulty: basic
 timelimit: 1800
+enhanced_loading: null
 ---
 Define Your First Asset
 ===
