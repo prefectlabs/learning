@@ -41,6 +41,28 @@ notes:
     In Dagster, this building block is called an **asset** (you'll also see the longer name, software-defined asset). It's a Python function with a decorator on it, and it's the thing this whole course is built around.
 - type: text
   contents: |-
+    # What's an asset, exactly?
+
+    An asset is an object in persistent storage that captures some understanding of the world. If you run a data pipeline today, you're already producing them: a table or view in a warehouse like BigQuery, a file on your machine or in blob storage like S3, a trained TensorFlow or PyTorch model, a dbt model or Fivetran connector. Dagster calls these **software-defined assets** because the definition lives in code, and the code carries the whole recipe.
+
+    Every asset definition has four parts:
+
+    - The `@dg.asset` **decorator**, which tells Dagster this function produces an asset
+    - An **asset key** that uniquely identifies it. By default that's the function name, and keys can take prefixes the way files sit inside folders
+    - Its **upstream dependencies**, referenced by their asset keys. The next challenge is built entirely around these
+    - A **Python function** that computes the asset's contents
+
+    Here's the cookie pipeline from the previous note, written down as code:
+
+    ```python
+    @dg.asset
+    def cookie_dough(dry_ingredients, wet_ingredients):
+        return dry_ingredients + wet_ingredients
+    ```
+
+    Notice the name. Assets get **noun** names, a descriptor of what's produced. `cookie_dough` names the thing that exists afterward. A name like `combine_ingredients` would describe the work instead of the result, which is the task-centric habit this whole approach replaces.
+- type: text
+  contents: |-
     # What you're building
 
     Over this course you'll build a working pipeline on public data from [NYC OpenData](https://opendata.cityofnewyork.us/), specifically the [TLC Trip Record Data](https://www.nyc.gov/site/tlc/about/tlc-trip-record-data.page) covering every yellow cab ride in the city.
@@ -139,8 +161,12 @@ All definitions loaded successfully.
 
 If you had a syntax error or a bad import, this is where you'd find out. Get in the habit of running it after every edit.
 
+A word on what `dg` is actually doing. Scaffolding comes from **Dagster Components**, the project-structure system introduced in Dagster 1.11 that `dg` uses to organize and generate code. Components go much deeper than file placement, all the way to reusable templates for entire workflow patterns, but they make the most sense once the fundamentals underneath them are solid. This course uses `dg` for scaffolding and validation and leaves the rest of Components for later; the [ETL pipeline tutorial](https://docs.dagster.io/etl-pipeline-tutorial/) picks up that thread.
+
 Write the taxi_trips_file asset
 ===
+
+Every asset you will ever write has the same four parts: the `@dg.asset` decorator that registers it, an asset key that identifies it (the function name, by default), any upstream dependencies it draws on, and a Python function that computes it. `taxi_trips_file` uses three of the four. Its dependencies arrive in the next challenge, so watch for the other three parts as the file comes together.
 
 Open the [Code Editor](tab-Code-Editor) tab and navigate to `src/dagster_essentials/defs/assets/trips.py`. Delete the scaffolded placeholder code. You're replacing the whole file.
 
