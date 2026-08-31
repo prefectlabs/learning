@@ -1,9 +1,11 @@
 #!/bin/bash
 set -euxo pipefail
 
-# Wait for Instruqt host bootstrap to finish
-until [ -f /opt/instruqt/bootstrap/host-bootstrap-completed ]; do
-  sleep 1
+# Wait for Instruqt host bootstrap, but never hang forever: the marker
+# file is not guaranteed to exist on VM images.
+for _ in $(seq 1 60); do
+  [ -f /opt/instruqt/bootstrap/host-bootstrap-completed ] && break
+  sleep 2
 done
 
 apt-get update
@@ -12,18 +14,37 @@ apt-get install -y curl git
 # Install the uv package manager
 curl -LsSf https://astral.sh/uv/install.sh | sh
 export PATH="/root/.local/bin:$PATH"
-echo 'export PATH="/root/.local/bin:$PATH"' >> /root/.bashrc
 
 # Clone the Dagster University project used throughout the course
 cd /root
 git clone --depth 1 https://github.com/dagster-io/project-dagster-university.git
 
 # Install course dependencies into the project's virtual environment
-cd /root/project-dagster-university/dagster_university/dagster_essentials
+PROJECT_DIR=/root/project-dagster-university/dagster_university/dagster_essentials
+cd "$PROJECT_DIR"
 uv sync
 
-# Every new shell lands in the course project with the venv active
+# Make the course tooling available in every shell, regardless of how it
+# initializes: symlinks for the binaries, profile.d for login shells,
+# bashrc for interactive non-login shells.
+ln -sf /root/.local/bin/uv /usr/local/bin/uv
+ln -sf /root/.local/bin/uvx /usr/local/bin/uvx
+ln -sf "$PROJECT_DIR/.venv/bin/dg" /usr/local/bin/dg
+ln -sf "$PROJECT_DIR/.venv/bin/dagster" /usr/local/bin/dagster
+
+cat > /etc/profile.d/dagster-course.sh <<'EOF'
+export PATH="/root/.local/bin:$PATH"
+if [ -d /root/project-dagster-university/dagster_university/dagster_essentials ]; then
+  cd /root/project-dagster-university/dagster_university/dagster_essentials
+  [ -f .venv/bin/activate ] && . .venv/bin/activate
+fi
+EOF
+
 cat >> /root/.bashrc <<'EOF'
+export PATH="/root/.local/bin:$PATH"
 cd /root/project-dagster-university/dagster_university/dagster_essentials
 source .venv/bin/activate
 EOF
+
+# Prove the environment works before declaring the sandbox ready
+"$PROJECT_DIR/.venv/bin/dg" --help >/dev/null
