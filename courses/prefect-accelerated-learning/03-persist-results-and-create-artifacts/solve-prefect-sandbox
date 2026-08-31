@@ -1,0 +1,49 @@
+#!/bin/bash
+set -euxo pipefail
+
+cd /root/pal
+
+cat <<'EOF' > results_artifacts.py
+from pathlib import Path
+
+import pandas as pd
+from prefect import flow, task
+from prefect.artifacts import create_markdown_artifact
+from prefect.cache_policies import INPUTS
+
+
+@task(persist_result=True, cache_policy=INPUTS, log_prints=True)
+def build_weather_table(temp: float):
+    print(f"Building cached table for {temp}")
+    return pd.DataFrame(
+        [{"location": "Washington, DC", "temperature_c": temp, "status": "forecasted"}]
+    )
+
+
+@task
+def write_report(df: pd.DataFrame):
+    markdown_report = (
+        "# Weather Report\n\n"
+        "| Location | Temperature (C) | Status |\n"
+        "| --- | ---: | --- |\n"
+        f"| {df.iloc[0]['location']} | {df.iloc[0]['temperature_c']} | {df.iloc[0]['status']} |\n"
+    )
+    Path("weather_report.md").write_text(markdown_report, encoding="utf-8")
+    create_markdown_artifact(
+        key="pal-weather-report",
+        markdown=markdown_report,
+        description="Local PAL weather report",
+    )
+
+
+@flow(log_prints=True)
+def weather_report_flow():
+    df = build_weather_table(72.0)
+    build_weather_table(72.0)
+    write_report(df)
+    print("Report ready")
+
+
+if __name__ == "__main__":
+    weather_report_flow()
+EOF

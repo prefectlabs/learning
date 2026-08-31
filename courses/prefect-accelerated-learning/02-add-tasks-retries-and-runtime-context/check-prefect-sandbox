@@ -1,0 +1,12 @@
+#!/bin/bash
+set -euxo pipefail
+
+cd /root/pal
+
+test -f weather_tasks.py
+grep -q "@task" weather_tasks.py
+test "$(grep -c "@task" weather_tasks.py)" -ge 2
+grep -q "retries=3" weather_tasks.py
+grep -q "log_prints=True" weather_tasks.py
+grep -q "runtime.flow_run" weather_tasks.py
+grep -q "weather.csv" weather_tasks.py

@@ -1,0 +1,14 @@
+#!/bin/bash
+set -euxo pipefail
+
+cd /root/pal
+
+test -f results_artifacts.py
+grep -q "persist_result=True" results_artifacts.py
+grep -q "cache_policy=INPUTS" results_artifacts.py
+grep -q "create_markdown_artifact" results_artifacts.py
+
+rm -f weather_report.md
+uv run results_artifacts.py
+test -f weather_report.md
+grep -q "Weather Report" weather_report.md

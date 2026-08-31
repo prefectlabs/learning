@@ -1,0 +1,17 @@
+#!/bin/bash
+set -euxo pipefail
+
+cd /root/pal
+
+test -f bonus_patterns.py
+grep -q "transaction" bonus_patterns.py
+grep -q "on_rollback" bonus_patterns.py
+grep -q "bonus-side-effect.txt" bonus_patterns.py
+
+rm -f bonus-side-effect.txt
+set +e
+uv run bonus_patterns.py
+status=$?
+set -e
+test "$status" -ne 0
+test ! -f bonus-side-effect.txt

@@ -1,0 +1,36 @@
+slug: prefect-accelerated-learning
+id: zoffroqzewto
+title: Prefect Accelerated Learning
+teaser: Learn Prefect through seven hands-on labs covering flows, tasks, caching,
+  deployments, interaction patterns, and advanced workflow design.
+description: |-
+  Prefect Accelerated Learning adapts the PAL 2025 workshop into a self-paced Instruqt
+  course. You'll build real Prefect workflows locally, observe them in the UI, create
+  deployments backed by a local process work pool, and finish with advanced patterns
+  like human-in-the-loop flows, concurrency, and transactional design.
+icon: ./assets/logo-mark.svg
+tags:
+- draft
+- workflows
+- prefect
+- intermediate
+owner: prefect
+developers:
+- brendan.dalpe@prefect.io
+maintenance: true
+show_timer: true
+skipping_enabled: true
+idle_timeout: 1200
+timelimit: 6300
+lab_config:
+  extend_ttl: 1200
+  sidebar_enabled: true
+  feedback_recap_enabled: true
+  feedback_tab_enabled: false
+  loadingMessages: true
+  override_challenge_layout: false
+  hideStopButton: false
+  default_layout: AssignmentRight
+  default_layout_sidebar_size: 35
+checksum: "5556403522517574690"
+enhanced_loading: false

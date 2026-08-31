@@ -1,0 +1,44 @@
+#!/bin/bash
+set -euxo pipefail
+
+cd /root/pal
+
+cat <<'EOF' > bonus_patterns.py
+from pathlib import Path
+
+from prefect import flow, get_run_logger, task
+from prefect.transactions import transaction
+
+
+@task
+def write_side_effect(contents: str):
+    Path("bonus-side-effect.txt").write_text(contents, encoding="utf-8")
+
+
+@write_side_effect.on_rollback
+def cleanup_side_effect(txn):
+    logger = get_run_logger()
+    path = Path("bonus-side-effect.txt")
+    if path.exists():
+        path.unlink()
+        logger.info("Rolled back bonus-side-effect.txt")
+
+
+@task
+def validate_contents():
+    contents = Path("bonus-side-effect.txt").read_text(encoding="utf-8").splitlines()
+    if len(contents) < 2:
+        raise ValueError("Expected at least two lines")
+
+
+@flow(log_prints=True)
+def bonus_pipeline():
+    with transaction():
+        write_side_effect("only one line")
+        validate_contents()
+    print("Bonus pipeline completed")
+
+
+if __name__ == "__main__":
+    bonus_pipeline()
+EOF
