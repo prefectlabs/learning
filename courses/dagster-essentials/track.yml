@@ -1,0 +1,34 @@
+slug: dagster-essentials
+title: Dagster Essentials
+teaser: Learn the fundamentals of Dagster. Build an asset-centric data pipeline with
+  dependencies, resources, schedules, partitions, and sensors.
+description: |-
+  Learn the basics of Dagster, the asset-centric orchestration platform. In this track, you'll build a real data pipeline around NYC taxi data - defining software-defined assets, wiring up dependencies, sharing connections with resources, and automating everything with jobs, schedules, partitions, and sensors.
+
+  By the end, you'll have a complete, production-shaped Dagster project and the mental model to build your own: think in assets, not tasks.
+
+  Adapted from the Dagster University "Dagster Essentials" course.
+icon: ./assets/logo-mark.svg
+tags:
+- draft
+- dagster
+- beginner
+owner: prefect
+developers:
+- wayne@prefect.io
+maintenance: true
+show_timer: true
+skipping_enabled: true
+idle_timeout: 1200
+timelimit: 14400
+lab_config:
+  extend_ttl: 1200
+  sidebar_enabled: true
+  feedback_recap_enabled: true
+  feedback_tab_enabled: false
+  loadingMessages: true
+  override_challenge_layout: false
+  hideStopButton: false
+  default_layout: AssignmentRight
+  default_layout_sidebar_size: 33
+enhanced_loading: false

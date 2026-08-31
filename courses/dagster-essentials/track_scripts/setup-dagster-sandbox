@@ -1,0 +1,29 @@
+#!/bin/bash
+set -euxo pipefail
+
+# Wait for Instruqt host bootstrap to finish
+until [ -f /opt/instruqt/bootstrap/host-bootstrap-completed ]; do
+  sleep 1
+done
+
+apt-get update
+apt-get install -y curl git
+
+# Install the uv package manager
+curl -LsSf https://astral.sh/uv/install.sh | sh
+export PATH="/root/.local/bin:$PATH"
+echo 'export PATH="/root/.local/bin:$PATH"' >> /root/.bashrc
+
+# Clone the Dagster University project used throughout the course
+cd /root
+git clone --depth 1 https://github.com/dagster-io/project-dagster-university.git
+
+# Install course dependencies into the project's virtual environment
+cd /root/project-dagster-university/dagster_university/dagster_essentials
+uv sync
+
+# Every new shell lands in the course project with the venv active
+cat >> /root/.bashrc <<'EOF'
+cd /root/project-dagster-university/dagster_university/dagster_essentials
+source .venv/bin/activate
+EOF
