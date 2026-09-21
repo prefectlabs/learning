@@ -1,0 +1,67 @@
+#!/bin/bash
+set -euxo pipefail
+
+# Wait for Instruqt host bootstrap, but never hang forever: the marker
+# file is not guaranteed to exist on VM images.
+for _ in $(seq 1 60); do
+  [ -f /opt/instruqt/bootstrap/host-bootstrap-completed ] && break
+  sleep 2
+done
+
+export DEBIAN_FRONTEND=noninteractive
+apt-get update
+apt-get install -y curl git gh
+
+# Install the uv package manager and a pinned Python
+curl -LsSf https://astral.sh/uv/install.sh | sh
+export PATH="/root/.local/bin:$PATH"
+uv python install 3.12
+
+# Fetch the course project. Prefer the public repo so the sandbox matches
+# what self-paced learners clone; fall back to the bundle Instruqt hosts.
+# ASSET_HASH is rewritten by ./build-assets whenever the bundle changes.
+REPO_URL="https://github.com/prefectlabs/fastmcp-101.git"
+ASSET_HASH=937449487b67b279d17a45ee17e895dc
+cd /root
+if ! git clone --depth 1 "$REPO_URL" fastmcp-101; then
+  curl -fL -o fastmcp-101.tar.gz \
+    "https://play.instruqt.com/assets/tracks/${INSTRUQT_TRACK_ID}/${ASSET_HASH}/assets/fastmcp-101.tar.gz"
+  tar -xzf fastmcp-101.tar.gz -C /root
+  rm -f fastmcp-101.tar.gz
+fi
+
+# Make it the learner's own project: fresh history, no upstream remote.
+# Challenge 5 has them commit and push it to their own GitHub account.
+cd /root/fastmcp-101
+rm -rf .git
+git init -b main
+
+# Install FastMCP 4 and the dev tools into the project's virtual environment
+uv sync
+
+# Make the course tooling available in every shell, regardless of how it
+# initializes: symlinks for the binaries, profile.d for login shells,
+# bashrc for interactive non-login shells.
+ln -sf /root/.local/bin/uv /usr/local/bin/uv
+ln -sf /root/.local/bin/uvx /usr/local/bin/uvx
+ln -sf /root/fastmcp-101/.venv/bin/fastmcp /usr/local/bin/fastmcp
+ln -sf /root/fastmcp-101/.venv/bin/pytest /usr/local/bin/pytest
+ln -sf /root/fastmcp-101/.venv/bin/python /usr/local/bin/python
+
+cat > /etc/profile.d/fastmcp-course.sh <<'PROFILE'
+export PATH="/root/.local/bin:$PATH"
+if [ -d /root/fastmcp-101 ]; then
+  cd /root/fastmcp-101
+  [ -f .venv/bin/activate ] && . .venv/bin/activate
+fi
+PROFILE
+
+cat >> /root/.bashrc <<'BASHRC'
+export PATH="/root/.local/bin:$PATH"
+cd /root/fastmcp-101
+source .venv/bin/activate
+BASHRC
+
+# Prove the environment works before declaring the sandbox ready
+/root/fastmcp-101/.venv/bin/fastmcp version
+/root/fastmcp-101/.venv/bin/python -c "import fastmcp; assert fastmcp.__version__.startswith('4.'), fastmcp.__version__"

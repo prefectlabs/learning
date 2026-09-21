@@ -1,0 +1,21 @@
+#!/bin/bash
+set -euxo pipefail
+
+cd /root/fastmcp-101
+
+if ! origin="$(git remote get-url origin 2>/dev/null)"; then
+  fail-message "No git remote named origin yet. Run the commands in Step 4 (git commit, then gh repo create ... --push) so the project lives in your own GitHub account."
+  exit 1
+fi
+
+case "$origin" in
+  *prefectlabs/fastmcp-101*)
+    fail-message "origin still points at the course's upstream repository. Create your own repository with gh repo create and push to it."
+    exit 1
+    ;;
+esac
+
+if ! git rev-parse --verify HEAD >/dev/null 2>&1; then
+  fail-message "The project has no commits yet. Run git add . and git commit before pushing."
+  exit 1
+fi

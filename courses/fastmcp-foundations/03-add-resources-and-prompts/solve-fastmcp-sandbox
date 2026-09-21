@@ -1,0 +1,4 @@
+#!/bin/bash
+set -euxo pipefail
+
+cp /root/fastmcp-101/solutions/server.py /root/fastmcp-101/weather_server/server.py

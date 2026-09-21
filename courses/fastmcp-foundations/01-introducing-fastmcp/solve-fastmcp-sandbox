@@ -1,0 +1,4 @@
+#!/bin/bash
+set -euxo pipefail
+
+cp /root/fastmcp-101/solutions/hello.py /root/fastmcp-101/hello.py
