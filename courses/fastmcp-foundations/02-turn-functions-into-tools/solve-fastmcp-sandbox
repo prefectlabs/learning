@@ -1,0 +1,4 @@
+#!/bin/bash
+set -euxo pipefail
+
+sed -i 's/^# TODO (Lesson 2): add @mcp.tool above this function$/@mcp.tool/' /root/fastmcp-101/weather_server/server.py

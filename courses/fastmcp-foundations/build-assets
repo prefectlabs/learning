@@ -1,0 +1,38 @@
+#!/bin/bash
+# Builds assets/fastmcp-101.tar.gz from asset-sources/fastmcp-101 and pins its
+# MD5 into track_scripts/setup-fastmcp-sandbox, which uses it to fetch the
+# bundle from Instruqt if the GitHub clone fails. The archive is built
+# byte-for-byte reproducibly so the hash is stable across machines and CI.
+set -euo pipefail
+cd "$(dirname "$0")"
+
+python3 - <<'PY'
+import gzip, hashlib, io, os, pathlib, re, tarfile
+
+src = pathlib.Path("asset-sources/fastmcp-101")
+out = pathlib.Path("assets/fastmcp-101.tar.gz")
+setup = pathlib.Path("track_scripts/setup-fastmcp-sandbox")
+
+buf = io.BytesIO()
+with tarfile.open(fileobj=buf, mode="w", format=tarfile.PAX_FORMAT) as tar:
+    for path in sorted(p for p in src.rglob("*") if p.is_file()):
+        info = tar.gettarinfo(str(path), arcname=str(pathlib.Path("fastmcp-101") / path.relative_to(src)))
+        info.uid = info.gid = 0
+        info.uname = info.gname = ""
+        info.mtime = 0
+        info.mode = 0o755 if os.access(path, os.X_OK) else 0o644
+        with path.open("rb") as fh:
+            tar.addfile(info, fh)
+
+out.parent.mkdir(exist_ok=True)
+with out.open("wb") as fh:
+    with gzip.GzipFile(fileobj=fh, mode="wb", mtime=0) as gz:
+        gz.write(buf.getvalue())
+
+digest = hashlib.md5(out.read_bytes()).hexdigest()
+text = setup.read_text()
+new = re.sub(r'^ASSET_HASH=.*$', f'ASSET_HASH={digest}', text, count=1, flags=re.M)
+if new != text:
+    setup.write_text(new)
+print(f"built {out} md5={digest}")
+PY

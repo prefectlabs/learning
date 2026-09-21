@@ -1,0 +1,15 @@
+#!/bin/bash
+set -euxo pipefail
+
+cd /root/fastmcp-101
+
+if [ ! -f hello.py ]; then
+  fail-message "Create hello.py at the top of the fastmcp-101 folder (the Code Editor tab opens there)."
+  exit 1
+fi
+
+if ! /root/fastmcp-101/.venv/bin/fastmcp list hello.py --json 2>/dev/null \
+  | /root/fastmcp-101/.venv/bin/python -c 'import json,sys; d=json.load(sys.stdin); sys.exit(0 if any(t["name"]=="greet" for t in d.get("tools",[])) else 1)'; then
+  fail-message "hello.py does not expose a tool named greet. Check that @mcp.tool sits directly above def greet and that the file is saved."
+  exit 1
+fi

@@ -1,0 +1,16 @@
+#!/bin/bash
+set -euxo pipefail
+
+cd /root/fastmcp-101
+
+if ! /root/fastmcp-101/.venv/bin/fastmcp list weather_server/server.py --json 2>/dev/null \
+  | /root/fastmcp-101/.venv/bin/python -c '
+import json, sys
+names = {t["name"] for t in json.load(sys.stdin).get("tools", [])}
+missing = {"get_weather_forecast", "get_historical_weather", "calculate_rain_probability"} - names
+print("MISSING:", sorted(missing), file=sys.stderr)
+sys.exit(1 if missing else 0)
+'; then
+  fail-message "Not all three weather functions are registered as tools yet. Add @mcp.tool directly above get_weather_forecast, get_historical_weather, and calculate_rain_probability in weather_server/server.py, then save."
+  exit 1
+fi

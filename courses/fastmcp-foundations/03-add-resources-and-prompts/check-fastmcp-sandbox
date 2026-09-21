@@ -1,0 +1,17 @@
+#!/bin/bash
+set -euxo pipefail
+
+cd /root/fastmcp-101
+
+if ! /root/fastmcp-101/.venv/bin/fastmcp list weather_server/server.py --resources --prompts --json 2>/dev/null \
+  | /root/fastmcp-101/.venv/bin/python -c '
+import json, sys
+d = json.load(sys.stdin)
+ok_resource = any(r.get("uri") == "weather://about" for r in d.get("resources", []))
+ok_prompt = any(p.get("name") == "plan_outdoor_event" for p in d.get("prompts", []))
+print("resource:", ok_resource, "prompt:", ok_prompt, file=sys.stderr)
+sys.exit(0 if ok_resource and ok_prompt else 1)
+'; then
+  fail-message "The server needs a resource at weather://about and a prompt named plan_outdoor_event. Paste the block from Step 1 in place of the Lesson 3 TODO comment, above the __main__ block, and save."
+  exit 1
+fi

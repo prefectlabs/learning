@@ -1,22 +1,28 @@
 slug: fastmcp-foundations
 id: 4lktcd6ljjr5
 title: FastMCP Foundations
-teaser: Build MCP servers in Python with FastMCP. Give AI assistants the tools they
-  need to interact with your systems.
+teaser: Build, test, and deploy your first MCP server in Python with FastMCP 4. No prior MCP experience needed.
 description: |-
-  The Model Context Protocol (MCP) is how AI assistants connect to the real world. FastMCP makes building those connections simple with a Pythonic, decorator-based approach. In this track, you'll learn to create
-  MCP servers that expose tools, resources, and prompts to any MCP-compatible client. No boilerplate, no complexity, just Python code that extends what AI can do.
+  The Model Context Protocol (MCP) is the shared standard that lets AI assistants use outside systems: your data, your APIs, your expertise. You build a server once, and any MCP client can use it.
+
+  In this track you'll build a weather server with FastMCP 4, the Python framework that turns ordinary functions into MCP tools with one decorator. You'll add all three MCP primitives (tools, resources, and prompts), test the server in memory, run it over HTTP, and deploy it to a public URL on Prefect Horizon where you can chat with it.
+
+  Everything runs in a browser sandbox. You only need a GitHub account for the final deployment challenge.
 icon: ./assets/favicon.svg
 tags:
 - fastmcp
+- mcp
 - beginner
 owner: prefect
 developers:
 - wayne@prefect.io
 - brendan.dalpe@prefect.io
-idle_timeout: 300
-timelimit: 1200
+show_timer: true
+skipping_enabled: true
+idle_timeout: 1200
+timelimit: 7200
 lab_config:
+  extend_ttl: 1200
   sidebar_enabled: true
   feedback_recap_enabled: true
   feedback_tab_enabled: false

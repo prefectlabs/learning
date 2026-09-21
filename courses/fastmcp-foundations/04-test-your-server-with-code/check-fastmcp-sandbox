@@ -1,0 +1,14 @@
+#!/bin/bash
+set -euxo pipefail
+
+cd /root/fastmcp-101
+
+if ! /root/fastmcp-101/.venv/bin/pytest -q; then
+  fail-message "pytest is still reporting failures. Run pytest in the terminal and read the assertion message: it names the missing decorator, resource, or prompt."
+  exit 1
+fi
+
+if [ ! -f check_client.py ]; then
+  fail-message "Create check_client.py at the top of the fastmcp-101 folder with the client script from Step 3."
+  exit 1
+fi
